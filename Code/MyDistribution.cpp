@@ -52,6 +52,8 @@ double MyDistribution::log_pdf(const std::vector<double>& vec) const
 		|| vec[2] < min_logflux)
 		return -1E300;
 
+	logp = -log(gamma) - (vec[2] - min_logflux)/gamma;
+
 	return logp;
 }
 
