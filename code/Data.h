@@ -36,6 +36,7 @@ class Data
 				const char* sigma_file);
 
 		// Getters
+		int get_num_images() const { return num_images; }
 		int get_ni() const { return ni; }
 		int get_nj() const { return nj; }
 		double get_x_min() const { return x_min; }

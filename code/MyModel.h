@@ -12,14 +12,11 @@ class MyModel:public DNest3::Model
 		RJObject<MyDistribution> objects;
 
 		// The model image
-		std::vector< std::vector<double> > image;
-		void calculate_image();
-
-		// How many steps since image was computed from scratch
-		int staleness;
+		std::vector< std::vector< std::vector<double> > > images;
+		void calculate_images();
 
 		// Noise standard deviation
-		double sigma;
+		std::vector<double> sigmas;
 
 	public:
 		MyModel();

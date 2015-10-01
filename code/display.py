@@ -30,8 +30,7 @@ for i in xrange(0, posterior_sample.shape[0]):
 	gca().set_yticklabels(['1', '0', '-1'])
 
 	subplot(1, 2, 2)
-	sigma = sqrt(sig**2 + posterior_sample[i,-2]**2)
-	imshow((img - data)/sigma, interpolation='nearest', cmap='gray')
+	imshow(img - data, interpolation='nearest', cmap='gray')
 	title('Standardised Residuals')
 	gca().set_xticks([-0.5, 99.5, 199.5])
 	gca().set_yticks([-0.5, 99.5, 199.5])
