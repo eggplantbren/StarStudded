@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Data.h"
 #include <cmath>
+#include "Lookup.h"
 
 using namespace std;
 using namespace DNest3;
@@ -78,7 +79,7 @@ void MyModel::calculate_image()
 				rsq = pow(x[i][j] - xx, 2) + pow(y[i][j] - yy, 2);
 				exp_arg = 0.5*tau*rsq;
 				if(exp_arg < 10.)
-					image[i][j] += flux*C*exp(-exp_arg);
+					image[i][j] += flux*C*Lookup::evaluate(exp_arg);
 			}
 		}
 	}
