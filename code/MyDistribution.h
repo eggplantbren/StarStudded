@@ -8,8 +8,9 @@ class MyDistribution:public Distribution
 {
 	private:
 		// Pareto prior for the fluxes
-		double fluxlim;
-		double gamma;
+		// One for each band
+		std::vector<double> fluxlim;
+		std::vector<double> gamma;
 
 		// Save limits
 		double x_min, x_max, y_min, y_max, fluxlim_min, fluxlim_max;
