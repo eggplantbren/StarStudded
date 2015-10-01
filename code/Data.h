@@ -39,6 +39,8 @@ class Data
 		double get_x_max() const { return x_max; }
 		double get_y_min() const { return y_min; }
 		double get_y_max() const { return y_max; }
+		double get_x_range() const { return x_max - x_min; }
+		double get_y_range() const { return y_max - y_min; }
 		double get_dx() const { return dx; }
 		double get_dy() const { return dy; }
 		const std::vector< std::vector<double> >& get_x_rays() const

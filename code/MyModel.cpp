@@ -8,9 +8,8 @@ using namespace std;
 using namespace DNest3;
 
 MyModel::MyModel()
-:objects(3, 100, false, MyDistribution(
-	Data::get_instance().get_x_min(), Data::get_instance().get_x_max(),
-	Data::get_instance().get_y_min(), Data::get_instance().get_y_max(),
+:objects(3, 100, false, MyDistribution(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
+Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range(),
 			1E-3, 1E3))
 ,image(Data::get_instance().get_ni(),
 	vector<double>(Data::get_instance().get_nj()))
