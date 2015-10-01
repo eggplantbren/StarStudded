@@ -6,6 +6,9 @@
 class Data
 {
 	private:
+		// Number of images
+		int num_images;
+
 		// Number of pixels
 		int ni, nj;
 
@@ -20,10 +23,10 @@ class Data
 		std::vector< std::vector<double> > y_rays;
 
 		// The pixels
-		std::vector< std::vector<double> > image;
+		std::vector< std::vector< std::vector<double> > > images;
 
 		// Sigma map
-		std::vector< std::vector<double> > sigma;
+		std::vector< std::vector< std::vector<double> > > sigmas;
 
 		void compute_ray_grid();
 
@@ -47,10 +50,10 @@ class Data
 			{ return x_rays; }
 		const std::vector< std::vector<double> >& get_y_rays() const
 			{ return y_rays; }
-		const std::vector< std::vector<double> >& get_image() const
-			{ return image; }
-		const std::vector< std::vector<double> >& get_sigma() const
-			{ return sigma; }
+		const std::vector< std::vector< std::vector<double> > >& get_images() const
+			{ return images; }
+		const std::vector< std::vector< std::vector<double> > >& get_sigmas() const
+			{ return sigmas; }
 
 	// Singleton
 	private:

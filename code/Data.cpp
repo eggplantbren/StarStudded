@@ -21,7 +21,7 @@ void Data::load(const char* metadata_file, const char* image_file,
 	fstream fin(metadata_file, ios::in);
 	if(!fin)
 		cerr<<"# ERROR: couldn't open file "<<metadata_file<<"."<<endl;
-	fin>>ni>>nj;
+	fin>>num_images>>ni>>nj;
 	fin>>x_min>>x_max>>y_min>>y_max;
 	fin.close();
 
@@ -45,10 +45,11 @@ void Data::load(const char* metadata_file, const char* image_file,
 	fin.open(image_file, ios::in);
 	if(!fin)
 		cerr<<"# ERROR: couldn't open file "<<image_file<<"."<<endl;
-	image.assign(ni, vector<double>(nj));
-	for(size_t i=0; i<image.size(); i++)
-		for(size_t j=0; j<image[i].size(); j++)
-			fin>>image[i][j];
+	images.assign(num_images, vector< vector<double> >(ni, vector<double>(nj)));
+	for(int img=0; img<num_images; img++)
+		for(int i=0; i<ni; i++)
+			for(int j=0; j<nj; j++)
+				fin>>images[img][i][j];
 	fin.close();
 
 	/*
@@ -57,10 +58,11 @@ void Data::load(const char* metadata_file, const char* image_file,
 	fin.open(sigma_file, ios::in);
 	if(!fin)
 		cerr<<"# ERROR: couldn't open file "<<sigma_file<<"."<<endl;
-	sigma.assign(ni, vector<double>(nj));
-	for(size_t i=0; i<sigma.size(); i++)
-		for(size_t j=0; j<sigma[i].size(); j++)
-			fin>>sigma[i][j];
+	sigmas.assign(num_images, vector< vector<double> >(ni, vector<double>(nj)));
+	for(int img=0; img<num_images; img++)
+		for(int i=0; i<ni; i++)
+			for(int j=0; j<nj; j++)
+				fin>>sigmas[img][i][j];
 	fin.close();
 }
 
