@@ -1,4 +1,4 @@
-CFLAGS = -m64 -O3 -flto -march=native -funroll-loops -Wall -Wextra -ansi -pedantic
+CFLAGS = -m64 -O3 -flto -march=native -Wall -Wextra -ansi -pedantic
 LIBS =  -lrjobject -ldnest3 -lgsl -lgslcblas -lboost_system -lboost_thread
 
 default:

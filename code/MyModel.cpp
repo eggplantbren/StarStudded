@@ -41,9 +41,12 @@ void MyModel::calculate_image()
 
 	// Position and flux of a star
 	double xx, yy, flux, rsq, exp_arg;
+	double ii, jj;
 	const double width = 0.05;
+	const double width_in_pixels = 3.*ceil(width/Data::get_instance().get_dx());
 	const double tau = 1./(width*width);
-	double C = 1./(2*M_PI*width*width);
+	const double C = 1./(2*M_PI*width*width);
+	int imin, imax, jmin, jmax;
 
 	for(size_t m=0; m<components.size(); m++)
 	{
@@ -51,9 +54,27 @@ void MyModel::calculate_image()
 		yy = components[m][1];
 		flux = components[m][2];
 
-		for(size_t i=0; i<image.size(); i++)
+		ii = (Data::get_instance().get_y_max() - yy)/
+				Data::get_instance().get_dy();
+		jj = (xx - Data::get_instance().get_x_min())/
+				Data::get_instance().get_dx();
+		
+		imin = (int)floor(ii - width_in_pixels);
+		imax = (int)ceil(ii + width_in_pixels);
+		jmin = (int)floor(jj - width_in_pixels);
+		jmax = (int)ceil(jj + width_in_pixels);
+		if(imin < 0)
+			imin = 0;
+		if(imax > Data::get_instance().get_ni())
+			imax = Data::get_instance().get_ni();
+		if(jmin < 0)
+			jmin = 0;
+		if(jmax > Data::get_instance().get_nj())
+			jmax = Data::get_instance().get_nj();
+
+		for(int i=imin; i<imax; i++)
 		{
-			for(size_t j=0; j<image[i].size(); j++)
+			for(int j=jmin; j<jmax; j++)
 			{
 				rsq = pow(x[i][j] - xx, 2) + pow(y[i][j] - yy, 2);
 				exp_arg = 0.5*tau*rsq;
