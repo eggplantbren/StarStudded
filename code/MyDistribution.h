@@ -3,28 +3,16 @@
 
 #include <Distributions/Distribution.h>
 
-// Hyperparameters setting interim prior for galaxy properties
+// Hyperparameters setting conditional prior for star properties
 class MyDistribution:public Distribution
 {
 	private:
-		// Limits
-		double x_min, x_max, y_min, y_max;
-		double fluxlim_min, fluxlim_max;
-		double radiuslim_min, radiuslim_max;
-
-		// Lower limit and 1/slope for Pareto interim prior
-		// for masses
+		// Pareto prior for the fluxes
 		double fluxlim;
 		double gamma;
 
-		// Lower limit and 1/slope for Pareto interim prior
-		// for radii
-		double radiuslim;
-		double gamma_radius;
-
-		// Uniform interim prior for radius ratio and mass ratio
-		double a1, b1;
-		double a2, b2;
+		// Save limits
+		double x_min, x_max, y_min, y_max, fluxlim_min, fluxlim_max;
 
 		double perturb_parameters();
 
