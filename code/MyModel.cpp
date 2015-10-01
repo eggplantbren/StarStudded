@@ -40,7 +40,7 @@ void MyModel::calculate_image()
 					vector<double>(Data::get_instance().get_nj(), 0.));
 
 	// Position and flux of a star
-	double xx, yy, flux, rsq;
+	double xx, yy, flux, rsq, exp_arg;
 	const double width = 0.05;
 	const double tau = 1./(width*width);
 	double C = 1./(2*M_PI*width*width);
@@ -56,7 +56,9 @@ void MyModel::calculate_image()
 			for(size_t j=0; j<image[i].size(); j++)
 			{
 				rsq = pow(x[i][j] - xx, 2) + pow(y[i][j] - yy, 2);
-				image[i][j] += flux*C*exp(-0.5*tau*rsq);
+				exp_arg = 0.5*tau*rsq;
+				if(exp_arg < 10.)
+					image[i][j] += flux*C*exp(-exp_arg);
 			}
 		}
 	}
