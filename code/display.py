@@ -5,9 +5,9 @@ import os
 # Piecewise linear stretch
 def stretch(x):
 	y = x.copy()
-	y = (y - y.min())/(y.max() - y.min())
-	y[y > 0.1] = 0.1 + 0.05*(y[y > 0.1] - 0.1)
-	return y
+#	y = (y - y.min())/(y.max() - y.min())
+#	y[y > 0.1] = 0.1 + 0.05*(y[y > 0.1] - 0.1)
+	return log(abs(y) + 1.)
 
 saveFrames = False # For making movies
 if saveFrames:
@@ -22,7 +22,7 @@ hold(False)
 for i in xrange(0, posterior_sample.shape[0]):
 	img = posterior_sample[i, 0:200**2].reshape((200, 200))
 	subplot(1, 2, 1)
-	imshow(stretch(img))
+	imshow(stretch(img), interpolation='nearest', cmap='afmhot')
 	title('Model {i}'.format(i=i))
 	gca().set_xticks([-0.5, 99.5, 199.5])
 	gca().set_yticks([-0.5, 99.5, 199.5])
@@ -31,7 +31,7 @@ for i in xrange(0, posterior_sample.shape[0]):
 
 	subplot(1, 2, 2)
 	sigma = sqrt(sig**2 + posterior_sample[i,-2]**2)
-	imshow((img - data)/sigma)
+	imshow((img - data)/sigma, interpolation='nearest', cmap='gray')
 	title('Standardised Residuals')
 	gca().set_xticks([-0.5, 99.5, 199.5])
 	gca().set_yticks([-0.5, 99.5, 199.5])
