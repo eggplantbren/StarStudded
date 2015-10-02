@@ -13,7 +13,7 @@ saveFrames = False # For making movies
 if saveFrames:
 	os.system('rm Frames/*.png')
 
-posterior_sample = atleast_2d(loadtxt('sample.txt'))
+posterior_sample = atleast_2d(loadtxt('posterior_sample.txt'))
 data = np.reshape(loadtxt('Data/test_image.txt'),(2,200,200))
 print(np.shape(data))
 sig = np.reshape(loadtxt('Data/test_sigma.txt'),(2,200,200))
