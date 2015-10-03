@@ -22,7 +22,7 @@ ni = metadata[1]
 nj = metadata[2]
 
 # num_sam_acccepted X nbands*xdim*ydim
-posterior_sample = atleast_2d(loadtxt('sample.txt'))
+posterior_sample = atleast_2d(loadtxt('posterior_sample.txt'))
 # print(np.shape(posterior_sample))
 
 # generate after running showresults.py
@@ -34,9 +34,10 @@ data = np.reshape(loadtxt('Data/test_image.txt'), (num_images, ni, nj))
 print((data.shape))
 sig = np.reshape(loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
-ion()
-hold(False)
 for j in xrange(0, num_images):
+    ion()
+    hold(False)
+
     print(j)
     print(np.shape(posterior_sample[0, j * ni * nj:(j + 1) * ni * nj]))
     print(np.shape(posterior_sample[0, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))))
