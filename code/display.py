@@ -34,36 +34,24 @@ data = np.reshape(loadtxt('Data/test_image.txt'), (num_images, ni, nj))
 print((data.shape))
 sig = np.reshape(loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
-for j in xrange(0, num_images):
-    ion()
-    hold(False)
+ion()
+hold(False)
 
-    print(j)
-    print(np.shape(posterior_sample[0, j * ni * nj:(j + 1) * ni * nj]))
-    print(np.shape(posterior_sample[0, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))))
-    for i in xrange(0, posterior_sample.shape[0]):
-        subplot(1, 2, 1)
+for i in xrange(0, posterior_sample.shape[0]):
+    for j in xrange(0, num_images):
+        subplot(num_images, 2, 1 + j*num_images)
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
-        imshow(stretch(img), interpolation='nearest', cmap='gray')
-        title('Model {i}'.format(i=i))
-        #gca().set_xticks([-0.5, 99.5, 199.5])
-        #gca().set_yticks([-0.5, 99.5, 199.5])
-        gca().set_xticklabels(['-1', '0', '1'])
-        gca().set_yticklabels(['1', '0', '-1'])
+        imshow(-img, interpolation='nearest', cmap='gray')
+        title('Model {i}'.format(i=(i+1)))
 
-        subplot(1, 2, 2)
-        imshow(img - data[j, :, :], interpolation='nearest', cmap='gray')
-        title('Standardised Residuals')
-        #gca().set_xticks([-0.5, 99.5, 199.5])
-        #gca().set_yticks([-0.5, 99.5, 199.5])
-        gca().set_xticklabels(['-1', '0', '1'])
-        gca().set_yticklabels(['1', '0', '-1'])
+        subplot(num_images, 2, 2 + j*num_images)
+        imshow(-(img - data[j, :, :]), interpolation='nearest', cmap='gray')
+        title('Residuals')
+    draw()
 
-        draw()
+    if saveFrames:
+        savefig('Frames/' + '%0.4d' % (i + 1) + '.png', bbox_inches='tight')
+        print('Frames/' + '%0.4d' % (i + 1) + '.png')
 
-        if saveFrames:
-            savefig('Frames/' + '%0.4d' % (i + 1) + '.png', bbox_inches='tight')
-            print('Frames/' + '%0.4d' % (i + 1) + '.png')
-
-    ioff()
-    show()
+ioff()
+show()
