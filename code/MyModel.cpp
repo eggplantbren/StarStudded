@@ -24,7 +24,7 @@ void MyModel::fromPrior()
 	objects.fromPrior();
 	calculate_images();
 	for(size_t i=0; i<sigmas.size(); i++)
-		sigmas[i] = exp(log(1.) + log(1E6)*randomU());
+		sigmas[i] = exp(tan(M_PI*(0.97*randomU() - 0.485)));
 }
 
 void MyModel::calculate_images()
@@ -102,10 +102,11 @@ double MyModel::perturb()
 	else
 	{
 		int which = randInt(sigmas.size());
-
 		sigmas[which] = log(sigmas[which]);
-		sigmas[which] += log(1E6)*randh();
-		sigmas[which] = mod(sigmas[which] - log(1.), log(1E6)) + log(1.);
+		sigmas[which] = (atan(sigmas[which])/M_PI + 0.485)/0.97;
+		sigmas[which] += randh();
+		wrap(sigmas[which], 0., 1.);
+		sigmas[which] = tan(M_PI*(0.97*sigmas[which] - 0.485));
 		sigmas[which] = exp(sigmas[which]);
 	}
 
