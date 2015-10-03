@@ -1,3 +1,5 @@
+import matplotlib as mpl
+mpl.use('TkAgg')
 from pylab import *
 import os
 
@@ -13,39 +15,34 @@ if saveFrames:
     os.system('rm Frames/*.png')
 
 metadata = np.loadtxt('Data/test_metadata.txt').astype(int)
-print(metadata)
+# print(metadata)
 
 num_images = metadata[0]
 ni = metadata[1]
 nj = metadata[2]
 
 # num_sam_acccepted X nbands*xdim*ydim
-# sample = atleast_2d(loadtxt('sample.txt'))
+posterior_sample = atleast_2d(loadtxt('sample.txt'))
+# print(np.shape(posterior_sample))
 
 # generate after running showresults.py
-posterior_sample = atleast_2d(loadtxt('posterior_sample.txt'))
-print(np.shape(posterior_sample))
+# posterior_sample = atleast_2d(loadtxt('posterior_sample.txt'))
+# print(np.shape(posterior_sample))
 # posterior_sample show have same shape as _image.txt
 
 data = np.reshape(loadtxt('Data/test_image.txt'), (num_images, ni, nj))
-print(np.shape(data))
-sig = np.reshape(
-    loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
-print(np.shape(sig))
+print((data.shape))
+sig = np.reshape(loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
 ion()
 hold(False)
 for j in xrange(0, num_images):
     print(j)
-    print(np.shape(posterior_sample[
-          0, j * ni * nj:(j + 1) * ni * nj]))
-    print(np.shape(posterior_sample[0, j * ni * nj:(
-        j + 1) * ni * nj].reshape((ni, nj))))
-    img = posterior_sample[0, j * ni * nj
-        :(j + 1) * ni * nj].reshape((ni, nj))
+    print(np.shape(posterior_sample[0, j * ni * nj:(j + 1) * ni * nj]))
+    print(np.shape(posterior_sample[0, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))))
     for i in xrange(0, posterior_sample.shape[0]):
-        #img = posterior_sample[0, j*200**2:(j+1)*200**2].reshape((200, 200))
         subplot(1, 2, 1)
+        img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
         imshow(stretch(img), interpolation='nearest', cmap='gray')
         title('Model {i}'.format(i=i))
         #gca().set_xticks([-0.5, 99.5, 199.5])
@@ -54,7 +51,7 @@ for j in xrange(0, num_images):
         gca().set_yticklabels(['1', '0', '-1'])
 
         subplot(1, 2, 2)
-        imshow(img - data[j], interpolation='nearest', cmap='gray')
+        imshow(img - data[j, :, :], interpolation='nearest', cmap='gray')
         title('Standardised Residuals')
         #gca().set_xticks([-0.5, 99.5, 199.5])
         #gca().set_yticks([-0.5, 99.5, 199.5])
