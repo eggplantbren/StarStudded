@@ -50,7 +50,7 @@ void MyModel::calculate_images()
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
 		double width = psfs[img].get_sigma2();
-		double width_in_pixels = 3.*ceil(width/Data::get_instance().get_dx());
+		double width_in_pixels = PSF::edge*ceil(width/Data::get_instance().get_dx());
 		int imin, imax, jmin, jmax;
 
 		for(size_t m=0; m<components.size(); m++)
