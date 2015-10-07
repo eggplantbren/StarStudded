@@ -44,15 +44,13 @@ void MyModel::calculate_images()
 					vector<double>(Data::get_instance().get_nj(), 0.)));
 
 	// Position and flux of a star
-	double xx, yy, flux, rsq, exp_arg;
+	double xx, yy, flux;
 	double ii, jj;
 
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
-		double width = 0.05;
+		double width = psfs[img].get_sigma2();
 		double width_in_pixels = 3.*ceil(width/Data::get_instance().get_dx());
-		double tau = 1./(width*width);
-		double C = 1./(2*M_PI*width*width);
 		int imin, imax, jmin, jmax;
 
 		for(size_t m=0; m<components.size(); m++)
@@ -83,10 +81,8 @@ void MyModel::calculate_images()
 			{
 				for(int j=jmin; j<jmax; j++)
 				{
-					rsq = pow(x[i][j] - xx, 2) + pow(y[i][j] - yy, 2);
-					exp_arg = 0.5*tau*rsq;
-					if(exp_arg < 10.)
-						images[img][i][j] += flux*C*Lookup::evaluate(exp_arg);
+					images[img][i][j] += flux*psfs[img].evaluate(x[i][j] - xx,
+																y[i][j] - yy);
 				}
 			}
 		}
