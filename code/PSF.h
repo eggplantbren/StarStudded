@@ -33,6 +33,9 @@ class PSF
 		void fromPrior();
 		double perturb();
 
+		// Getters
+		double get_sigma2() const { return sigma2; }
+
 		friend std::ostream& operator << (std::ostream& out,
 							const PSF& psf);
 };
