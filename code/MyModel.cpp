@@ -12,9 +12,10 @@ MyModel::MyModel()
 :objects(2 + Data::get_instance().get_num_images(), 100, false, MyDistribution(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
 Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range(),
 			1E-3, 1E3))
+,sigmas(Data::get_instance().get_num_images())
+,psfs(Data::get_instance().get_num_images())
 ,images(Data::get_instance().get_num_images(), vector< vector<double> >(Data::get_instance().get_ni(),
 					vector<double>(Data::get_instance().get_nj())))
-,sigmas(Data::get_instance().get_num_images())
 {
 
 }
@@ -22,6 +23,8 @@ Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data:
 void MyModel::fromPrior()
 {
 	objects.fromPrior();
+	for(size_t i=0; i<psfs.size(); i++)
+		psfs[i].fromPrior();
 	calculate_images();
 	for(size_t i=0; i<sigmas.size(); i++)
 		sigmas[i] = exp(tan(M_PI*(0.97*randomU() - 0.485)));
@@ -46,10 +49,10 @@ void MyModel::calculate_images()
 
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
-		const double width = 0.05;
-		const double width_in_pixels = 3.*ceil(width/Data::get_instance().get_dx());
-		const double tau = 1./(width*width);
-		const double C = 1./(2*M_PI*width*width);
+		double width = 0.05;
+		double width_in_pixels = 3.*ceil(width/Data::get_instance().get_dx());
+		double tau = 1./(width*width);
+		double C = 1./(2*M_PI*width*width);
 		int imin, imax, jmin, jmax;
 
 		for(size_t m=0; m<components.size(); m++)
@@ -94,10 +97,15 @@ double MyModel::perturb()
 {
 	double logH = 0.;
 
-	if(randomU() <= 0.75)
+	if(randomU() <= 0.5)
 	{
 		logH += objects.perturb();
 		calculate_images();
+	}
+	else if(randomU() <= 0.5)
+	{
+		int which = randInt(psfs.size());
+		logH += psfs[which].perturb();
 	}
 	else
 	{

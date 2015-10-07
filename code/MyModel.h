@@ -4,19 +4,24 @@
 #include "Model.h"
 #include <vector>
 #include <RJObject.h>
+#include "PSF.h"
 #include "MyDistribution.h"
 
 class MyModel:public DNest3::Model
 {
 	private:
+		// The stars
 		RJObject<MyDistribution> objects;
+
+		// Noise standard deviation for each image
+		std::vector<double> sigmas;
+
+		// PSF model for each image
+		std::vector<PSF> psfs;
 
 		// The model image
 		std::vector< std::vector< std::vector<double> > > images;
 		void calculate_images();
-
-		// Noise standard deviation
-		std::vector<double> sigmas;
 
 	public:
 		MyModel();
