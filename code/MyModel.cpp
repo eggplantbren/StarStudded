@@ -102,6 +102,7 @@ double MyModel::perturb()
 	{
 		int which = randInt(psfs.size());
 		logH += psfs[which].perturb();
+		calculate_images();
 	}
 	else
 	{
