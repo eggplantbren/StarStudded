@@ -19,6 +19,9 @@ class MyModel:public DNest3::Model
 		// PSF model for each image
 		std::vector<PSF> psfs;
 
+		// Background levels
+		std::vector<double> backgrounds;
+
 		// The model image
 		std::vector< std::vector< std::vector<double> > > images;
 		void calculate_images();

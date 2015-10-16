@@ -14,6 +14,7 @@ Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data:
 			1E-3, 1E3))
 ,sigmas(Data::get_instance().get_num_images())
 ,psfs(Data::get_instance().get_num_images())
+,backgrounds(Data::get_instance().get_num_images())
 ,images(Data::get_instance().get_num_images(), vector< vector<double> >(Data::get_instance().get_ni(),
 					vector<double>(Data::get_instance().get_nj())))
 {
@@ -25,6 +26,9 @@ void MyModel::fromPrior()
 	objects.fromPrior();
 	for(size_t i=0; i<psfs.size(); i++)
 		psfs[i].fromPrior();
+	for(size_t i=0; i<backgrounds.size(); i++)
+		backgrounds[i] = -1000. + 2000.*randomU();
+
 	calculate_images();
 	for(size_t i=0; i<sigmas.size(); i++)
 		sigmas[i] = exp(tan(M_PI*(0.97*randomU() - 0.485)));
@@ -42,6 +46,10 @@ void MyModel::calculate_images()
 	// Zero the image
 	images.assign(Data::get_instance().get_num_images(), vector< vector<double> >(Data::get_instance().get_ni(),
 					vector<double>(Data::get_instance().get_nj(), 0.)));
+	for(int img=0; img<Data::get_instance().get_num_images(); img++)
+		for(int i=0; i<Data::get_instance().get_ni(); i++)
+			for(int j=0; j<Data::get_instance().get_ni(); j++)
+				images[img][i][j] = backgrounds[img];
 
 	// Position and flux of a star
 	double xx, yy, flux;
@@ -98,21 +106,31 @@ double MyModel::perturb()
 		logH += objects.perturb();
 		calculate_images();
 	}
-	else if(randomU() <= 0.5)
-	{
-		int which = randInt(psfs.size());
-		logH += psfs[which].perturb();
-		calculate_images();
-	}
 	else
 	{
-		int which = randInt(sigmas.size());
-		sigmas[which] = log(sigmas[which]);
-		sigmas[which] = (atan(sigmas[which])/M_PI + 0.485)/0.97;
-		sigmas[which] += randh();
-		wrap(sigmas[which], 0., 1.);
-		sigmas[which] = tan(M_PI*(0.97*sigmas[which] - 0.485));
-		sigmas[which] = exp(sigmas[which]);
+		int what = randInt(3);
+		if(what == 0)
+		{
+			int which = randInt(psfs.size());
+			logH += psfs[which].perturb();
+			calculate_images();
+		}
+		if(what == 1)
+		{
+			int which = randInt(sigmas.size());
+			sigmas[which] = log(sigmas[which]);
+			sigmas[which] = (atan(sigmas[which])/M_PI + 0.485)/0.97;
+			sigmas[which] += randh();
+			wrap(sigmas[which], 0., 1.);
+			sigmas[which] = tan(M_PI*(0.97*sigmas[which] - 0.485));
+			sigmas[which] = exp(sigmas[which]);
+		}
+		if(what == 2)
+		{
+			int which = randInt(backgrounds.size());
+			backgrounds[which] += 2000.*randh();
+			wrap(backgrounds[which], -1000., 1000.);
+		}
 	}
 
 	return logH;
