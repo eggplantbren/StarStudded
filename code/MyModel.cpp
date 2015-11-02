@@ -48,7 +48,7 @@ void MyModel::calculate_images()
 					vector<double>(Data::get_instance().get_nj(), 0.)));
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 		for(int i=0; i<Data::get_instance().get_ni(); i++)
-			for(int j=0; j<Data::get_instance().get_ni(); j++)
+			for(int j=0; j<Data::get_instance().get_nj(); j++)
 				images[img][i][j] = backgrounds[img];
 
 	// Position and flux of a star
@@ -130,6 +130,7 @@ double MyModel::perturb()
 			int which = randInt(backgrounds.size());
 			backgrounds[which] += 2000.*randh();
 			wrap(backgrounds[which], -1000., 1000.);
+			calculate_images();
 		}
 	}
 
