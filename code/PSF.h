@@ -2,6 +2,7 @@
 #define _PSF_
 
 #include <ostream>
+#include "DNest4/code/RNG.h"
 
 // Pixel-convolved PSF
 class PSF
@@ -30,8 +31,8 @@ class PSF
 		double get_rEdge() const { return rEdge; }
 
 		// Can infer PSF!
-		void fromPrior();
-		double perturb();
+		void from_prior(DNest4::RNG& rng);
+		double perturb(DNest4::RNG& rng);
 
 		// Getters
 		double get_sigma2() const { return sigma2; }

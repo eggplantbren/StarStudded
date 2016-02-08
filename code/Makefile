@@ -1,8 +1,8 @@
-CFLAGS = -m64 -O3 -flto -march=native -Wall -Wextra -ansi -pedantic
-LIBS =  -lrjobject -ldnest3 -lgsl -lgslcblas -lboost_system -lboost_thread
+CFLAGS = -std=c++11 -O3 -Wall -Wextra -pedantic
+LIBS =  -ldnest4 -lpthread
 
 default:
-	g++ $(CFLAGS) -c *.cpp
-	g++ -o main *.o $(LIBS)
+	g++ -I$(DNEST4_PATH) $(CFLAGS) -c *.cpp
+	g++ -L$(DNEST4_PATH)/DNest4/code -o main *.o $(LIBS)
 	rm -f *.o
 

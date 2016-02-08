@@ -1,14 +1,13 @@
 #include "PSF.h"
 #include "Data.h"
 #include "Lookup.h"
-#include "RandomNumberGenerator.h"
-#include "Utils.h"
+#include "DNest4/code/Utils.h"
 #include <cmath>
 #include <cassert>
 #include <iostream>
 
 using namespace std;
-using namespace DNest3;
+using namespace DNest4;
 
 const double PSF::edge = 5.0;
 
@@ -50,30 +49,30 @@ void PSF::sync()
 	sinTheta = sin(theta);
 }
 
-void PSF::fromPrior()
+void PSF::from_prior(RNG& rng)
 {
 	// Log-uniform between 0.3 and 30 pixel widths
-	sigma1 = exp(log(0.3*Data::get_instance().get_dx()) + log(100.)*randomU());
-	double diff = 2.3*randomU();
+	sigma1 = exp(log(0.3*Data::get_instance().get_dx()) + log(100.)*rng.rand());
+	double diff = 2.3*rng.rand();
 	sigma2 = exp(log(sigma1) + diff);
-	weight = randomU();
-	q = 0.1 + 0.9*randomU();
-	theta = M_PI*randomU();
+	weight = rng.rand();
+	q = 0.1 + 0.9*rng.rand();
+	theta = M_PI*rng.rand();
 
 	sync();
 }
 
-double PSF::perturb()
+double PSF::perturb(RNG& rng)
 {
 	double logH = 0.;
 
-	int which = randInt(5);
+	int which = rng.rand_int(5);
 	if(which == 0)
 	{
 		double diff = log(sigma2) - log(sigma1);
 
 		sigma1 = log(sigma1);
-		sigma1 += log(100.)*pow(10., 1.5 - 6.*randomU())*randn();
+		sigma1 += log(100.)*rng.randh();
 		sigma1 = mod(sigma1 - log(0.3*Data::get_instance().get_dx()),
 				log(100.)) + log(0.3*Data::get_instance().get_dx());
 		sigma1 = exp(sigma1);
@@ -83,23 +82,23 @@ double PSF::perturb()
 	else if(which == 1)
 	{
 		double diff = log(sigma2) - log(sigma1);
-		diff += 2.3*pow(10., 1.5 - 6.*randomU())*randn();
+		diff += 2.3*rng.randh();
 		diff = mod(diff, 2.3);
 		sigma2 = exp(log(sigma1) + diff);
 	}
 	else if(which == 2)
 	{
-		weight += pow(10., 1.5 - 6.*randomU())*randn();
+		weight += rng.randh();
 		weight = mod(weight, 1.);
 	}
 	else if(which == 3)
 	{
-		q += 0.9*randh();
+		q += 0.9*rng.randh();
 		wrap(q, 0.1, 1.);
 	}
 	else
 	{
-		theta += M_PI*randh();
+		theta += M_PI*rng.randh();
 		wrap(theta, 0., M_PI);
 	}
 

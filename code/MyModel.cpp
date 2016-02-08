@@ -1,15 +1,14 @@
 #include "MyModel.h"
-#include "RandomNumberGenerator.h"
-#include "Utils.h"
+#include "DNest4/code/Utils.h"
 #include "Data.h"
 #include <cmath>
 #include "Lookup.h"
 
 using namespace std;
-using namespace DNest3;
+using namespace DNest4;
 
 MyModel::MyModel()
-:objects(2 + Data::get_instance().get_num_images(), 100, false, MyDistribution(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
+:objects(2 + Data::get_instance().get_num_images(), 100, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
 Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range(),
 			1E-3, 1E3))
 ,sigmas(Data::get_instance().get_num_images())
@@ -21,17 +20,17 @@ Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data:
 
 }
 
-void MyModel::fromPrior()
+void MyModel::from_prior(RNG& rng)
 {
-	objects.fromPrior();
+	objects.from_prior(rng);
 	for(size_t i=0; i<psfs.size(); i++)
-		psfs[i].fromPrior();
+		psfs[i].from_prior(rng);
 	for(size_t i=0; i<backgrounds.size(); i++)
-		backgrounds[i] = -1000. + 2000.*randomU();
+		backgrounds[i] = -1000. + 2000.*rng.rand();
 
 	calculate_images();
 	for(size_t i=0; i<sigmas.size(); i++)
-		sigmas[i] = exp(tan(M_PI*(0.97*randomU() - 0.485)));
+		sigmas[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
 }
 
 void MyModel::calculate_images()
@@ -97,38 +96,38 @@ void MyModel::calculate_images()
 	}
 }
 
-double MyModel::perturb()
+double MyModel::perturb(RNG& rng)
 {
 	double logH = 0.;
 
-	if(randomU() <= 0.5)
+	if(rng.rand() <= 0.5)
 	{
-		logH += objects.perturb();
+		logH += objects.perturb(rng);
 		calculate_images();
 	}
 	else
 	{
-		int what = randInt(3);
+		int what = rng.rand_int(3);
 		if(what == 0)
 		{
-			int which = randInt(psfs.size());
-			logH += psfs[which].perturb();
+			int which = rng.rand_int(psfs.size());
+			logH += psfs[which].perturb(rng);
 			calculate_images();
 		}
 		if(what == 1)
 		{
-			int which = randInt(sigmas.size());
+			int which = rng.rand_int(sigmas.size());
 			sigmas[which] = log(sigmas[which]);
 			sigmas[which] = (atan(sigmas[which])/M_PI + 0.485)/0.97;
-			sigmas[which] += randh();
+			sigmas[which] += rng.randh();
 			wrap(sigmas[which], 0., 1.);
 			sigmas[which] = tan(M_PI*(0.97*sigmas[which] - 0.485));
 			sigmas[which] = exp(sigmas[which]);
 		}
 		if(what == 2)
 		{
-			int which = randInt(backgrounds.size());
-			backgrounds[which] += 2000.*randh();
+			int which = rng.rand_int(backgrounds.size());
+			backgrounds[which] += 2000.*rng.randh();
 			wrap(backgrounds[which], -1000., 1000.);
 			calculate_images();
 		}
@@ -137,7 +136,7 @@ double MyModel::perturb()
 	return logH;
 }
 
-double MyModel::logLikelihood() const
+double MyModel::log_likelihood() const
 {
 	const vector< vector< vector<double> > >& data = Data::get_instance().get_images();
 	const vector< vector< vector<double> > >& sig = Data::get_instance().get_sigmas();

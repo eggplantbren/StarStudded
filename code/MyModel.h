@@ -1,17 +1,16 @@
 #ifndef _MyModel_
 #define _MyModel_
 
-#include "Model.h"
 #include <vector>
-#include <RJObject.h>
 #include "PSF.h"
-#include "MyDistribution.h"
+#include "DNest4/code/RJObject/RJObject.h"
+#include "MyConditionalPrior.h"
 
-class MyModel:public DNest3::Model
+class MyModel
 {
 	private:
 		// The stars
-		RJObject<MyDistribution> objects;
+		DNest4::RJObject<MyConditionalPrior> objects;
 
 		// Noise standard deviation for each image
 		std::vector<double> sigmas;
@@ -30,13 +29,13 @@ class MyModel:public DNest3::Model
 		MyModel();
 
 		// Generate the point from the prior
-		void fromPrior();
+		void from_prior(DNest4::RNG& rng);
 
 		// Metropolis-Hastings proposals
-		double perturb();
+		double perturb(DNest4::RNG& rng);
 
 		// Likelihood function
-		double logLikelihood() const;
+		double log_likelihood() const;
 
 		// Print to stream
 		void print(std::ostream& out) const;
