@@ -1,7 +1,9 @@
 import matplotlib as mpl
-mpl.use('TkAgg')
+import colormaps as cmaps
 from pylab import *
 import os
+
+mpl.use('TkAgg')
 
 # Piecewise linear stretch
 def stretch(x):
@@ -41,11 +43,11 @@ for i in range(0, posterior_sample.shape[0]):
     for j in range(0, num_images):
         subplot(num_images, 2, 1 + j*num_images)
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
-        imshow(-img, interpolation='nearest', cmap='gray')
+        imshow(-img, interpolation='nearest', cmap=cmaps.viridis)
         title('Model {i}'.format(i=(i+1)))
 
         subplot(num_images, 2, 2 + j*num_images)
-        imshow(-(img - data[j, :, :]), interpolation='nearest', cmap='gray')
+        imshow((img - data[j, :, :]), interpolation='nearest', cmap='coolwarm')
         title('Residuals')
     draw()
 
