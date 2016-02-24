@@ -1,6 +1,10 @@
+code/Frames
+code/Data/harvard
 levels.txt
 sample.txt
 sample_info.txt
 posterior_sample.txt
 weights.txt
-
+main
+__pycache__
+*.pyc
