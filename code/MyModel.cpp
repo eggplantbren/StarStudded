@@ -14,6 +14,7 @@ Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data:
 ,sigmas(Data::get_instance().get_num_images())
 ,psfs(Data::get_instance().get_num_images())
 ,backgrounds(Data::get_instance().get_num_images())
+,signs(Data::get_instance().get_num_images())
 ,images(Data::get_instance().get_num_images(), vector< vector<double> >(Data::get_instance().get_ni(),
 					vector<double>(Data::get_instance().get_nj())))
 {
@@ -25,8 +26,13 @@ void MyModel::from_prior(RNG& rng)
 	objects.from_prior(rng);
 	for(size_t i=0; i<psfs.size(); i++)
 		psfs[i].from_prior(rng);
-	for(size_t i=0; i<backgrounds.size(); i++)
-		backgrounds[i] = -1000. + 2000.*rng.rand();
+
+	for(size_t i=0; i<backgrounds.size(); ++i)
+    {
+		backgrounds[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
+        signs[i] = (rng.rand() <= 0.5)?(1):(-1);
+    }
+
 	calculate_images();
 
 	for(size_t i=0; i<sigmas.size(); i++)
@@ -49,7 +55,7 @@ void MyModel::calculate_image(int img)
     // Assign background value
 	for(int i=0; i<Data::get_instance().get_ni(); i++)
 		for(int j=0; j<Data::get_instance().get_nj(); j++)
-			images[img][i][j] = backgrounds[img];
+			images[img][i][j] = backgrounds[img]*signs[img];
 
 	// Position and flux of a star
 	double xx, yy, flux;
@@ -131,8 +137,18 @@ double MyModel::perturb(RNG& rng)
 		if(what == 2)
 		{
 			int which = rng.rand_int(backgrounds.size());
-			backgrounds[which] += 2000.*rng.randh();
-			wrap(backgrounds[which], -1000., 1000.);
+
+			backgrounds[which] = log(backgrounds[which]);
+			backgrounds[which] = (atan(backgrounds[which])/M_PI + 0.485)/0.97;
+			backgrounds[which] += rng.randh();
+			wrap(backgrounds[which], 0., 1.);
+			backgrounds[which] = tan(M_PI*(0.97*backgrounds[which] - 0.485));
+			backgrounds[which] = exp(backgrounds[which]);
+
+            // Possible sign flip
+            if(rng.rand() <= 0.5)
+                signs[which] *= -1;
+
 			calculate_image(which);
 		}
 	}

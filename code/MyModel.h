@@ -20,6 +20,7 @@ class MyModel
 
 		// Background levels
 		std::vector<double> backgrounds;
+        std::vector<short> signs;
 
 		// The model image
 		std::vector< std::vector< std::vector<double> > > images;
