@@ -1,3 +1,3 @@
 #!/bin/bash
-ffmpeg -r 10 -i %06d.png -c:v mjpeg -qscale:v 0 movie.avi
+ffmpeg -r 10 -i %06d.png -c:v theora -b:v 4192k movie.ogv
 
