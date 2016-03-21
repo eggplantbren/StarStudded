@@ -6,16 +6,13 @@
 using namespace DNest4;
 
 MyConditionalPrior::MyConditionalPrior(double x_min, double x_max,
-					double y_min, double y_max,
-					double fluxlim_min, double fluxlim_max)
+					                   double y_min, double y_max)
 :fluxlim(Data::get_instance().get_num_images())
 ,gamma(Data::get_instance().get_num_images())
 ,x_min(x_min)
 ,x_max(x_max)
 ,y_min(y_min)
 ,y_max(y_max)
-,fluxlim_min(fluxlim_min)
-,fluxlim_max(fluxlim_max)
 {
 
 }
@@ -24,8 +21,8 @@ void MyConditionalPrior::from_prior(DNest4::RNG& rng)
 {
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
-		fluxlim[img] = exp(log(fluxlim_min) + log(fluxlim_max/fluxlim_min)*rng.rand());
-		gamma[img] = rng.rand();
+		fluxlim[img] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
+		gamma[img] = 3*rng.rand();
 	}
 }
 
@@ -39,15 +36,16 @@ double MyConditionalPrior::perturb_hyperparameters(DNest4::RNG& rng)
 	if(which == 0)
 	{
 		fluxlim[index] = log(fluxlim[index]);
-		fluxlim[index] += log(fluxlim_max/fluxlim_min)*rng.randh();
-		fluxlim[index] = mod(fluxlim[index] - log(fluxlim_min),
-			log(fluxlim_max/fluxlim_min)) + log(fluxlim_min);
+		fluxlim[index] = (atan(fluxlim[index])/M_PI + 0.485)/0.97;
+		fluxlim[index] += rng.randh();
+		wrap(fluxlim[index], 0.0, 1.0);
+		fluxlim[index] = tan(M_PI*(0.97*fluxlim[index] - 0.485));
 		fluxlim[index] = exp(fluxlim[index]);
 	}
 	else if(which == 1)
 	{
-		gamma[index] += rng.randh();
-		gamma[index] = mod(gamma[index], 1.);
+		gamma[index] += 3*rng.randh();
+		gamma[index] = mod(gamma[index], 3.0);
 	}
 
 	return logH;

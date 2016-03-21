@@ -13,14 +13,13 @@ class MyConditionalPrior:public DNest4::ConditionalPrior
 		std::vector<double> gamma;
 
 		// Save limits
-		double x_min, x_max, y_min, y_max, fluxlim_min, fluxlim_max;
+		double x_min, x_max, y_min, y_max;
 
 		double perturb_hyperparameters(DNest4::RNG& rng);
 
 	public:
 		MyConditionalPrior(double x_min, double x_max,
-					double y_min, double y_max,
-					double fluxlim_min, double fluxlim_max);
+					       double y_min, double y_max);
 
 		void from_prior(DNest4::RNG& rng);
 
