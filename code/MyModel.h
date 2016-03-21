@@ -23,6 +23,9 @@ class MyModel
 
 		// The model image
 		std::vector< std::vector< std::vector<double> > > images;
+
+        /****** Private member functions ******/
+        void calculate_image(int img);
 		void calculate_images();
 
 	public:

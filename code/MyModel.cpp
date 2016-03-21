@@ -27,15 +27,15 @@ void MyModel::from_prior(RNG& rng)
 		psfs[i].from_prior(rng);
 	for(size_t i=0; i<backgrounds.size(); i++)
 		backgrounds[i] = -1000. + 2000.*rng.rand();
-
 	calculate_images();
+
 	for(size_t i=0; i<sigmas.size(); i++)
 		sigmas[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
 }
 
-void MyModel::calculate_images()
+void MyModel::calculate_image(int img)
 {
-	// Get coordinate stuff from data
+    // Get coordinate stuff from data
 	const vector< vector<double> >& x = Data::get_instance().get_x_rays();
 	const vector< vector<double> >& y = Data::get_instance().get_y_rays();
 
@@ -43,57 +43,61 @@ void MyModel::calculate_images()
 	const vector< vector<double> >& components = objects.get_components();
 
 	// Zero the image
-	images.assign(Data::get_instance().get_num_images(), vector< vector<double> >(Data::get_instance().get_ni(),
-					vector<double>(Data::get_instance().get_nj(), 0.)));
-	for(int img=0; img<Data::get_instance().get_num_images(); img++)
-		for(int i=0; i<Data::get_instance().get_ni(); i++)
-			for(int j=0; j<Data::get_instance().get_nj(); j++)
-				images[img][i][j] = backgrounds[img];
+	images[img].assign(Data::get_instance().get_ni(),
+					   vector<double>(Data::get_instance().get_nj(), 0.));
+
+    // Assign background value
+	for(int i=0; i<Data::get_instance().get_ni(); i++)
+		for(int j=0; j<Data::get_instance().get_nj(); j++)
+			images[img][i][j] = backgrounds[img];
 
 	// Position and flux of a star
 	double xx, yy, flux;
 	double ii, jj;
 
-	for(int img=0; img<Data::get_instance().get_num_images(); img++)
+    double width = psfs[img].get_sigma2();
+	double width_in_pixels = PSF::edge*ceil(width/Data::get_instance().get_dx());
+	int imin, imax, jmin, jmax;
+
+	for(size_t m=0; m<components.size(); m++)
 	{
-		double width = psfs[img].get_sigma2();
-		double width_in_pixels = PSF::edge*ceil(width/Data::get_instance().get_dx());
-		int imin, imax, jmin, jmax;
+		xx = components[m][0];
+		yy = components[m][1];
+		flux = components[m][2 + img];
 
-		for(size_t m=0; m<components.size(); m++)
+		ii = (Data::get_instance().get_y_max() - yy)/
+				Data::get_instance().get_dy();
+		jj = (xx - Data::get_instance().get_x_min())/
+				Data::get_instance().get_dx();
+	
+		imin = (int)floor(ii - width_in_pixels);
+		imax = (int)ceil(ii + width_in_pixels);
+		jmin = (int)floor(jj - width_in_pixels);
+		jmax = (int)ceil(jj + width_in_pixels);
+		if(imin < 0)
+			imin = 0;
+		if(imax > Data::get_instance().get_ni())
+			imax = Data::get_instance().get_ni();
+		if(jmin < 0)
+			jmin = 0;
+		if(jmax > Data::get_instance().get_nj())
+			jmax = Data::get_instance().get_nj();
+
+		for(int i=imin; i<imax; i++)
 		{
-			xx = components[m][0];
-			yy = components[m][1];
-			flux = components[m][2 + img];
-
-			ii = (Data::get_instance().get_y_max() - yy)/
-					Data::get_instance().get_dy();
-			jj = (xx - Data::get_instance().get_x_min())/
-					Data::get_instance().get_dx();
-		
-			imin = (int)floor(ii - width_in_pixels);
-			imax = (int)ceil(ii + width_in_pixels);
-			jmin = (int)floor(jj - width_in_pixels);
-			jmax = (int)ceil(jj + width_in_pixels);
-			if(imin < 0)
-				imin = 0;
-			if(imax > Data::get_instance().get_ni())
-				imax = Data::get_instance().get_ni();
-			if(jmin < 0)
-				jmin = 0;
-			if(jmax > Data::get_instance().get_nj())
-				jmax = Data::get_instance().get_nj();
-
-			for(int i=imin; i<imax; i++)
+			for(int j=jmin; j<jmax; j++)
 			{
-				for(int j=jmin; j<jmax; j++)
-				{
-					images[img][i][j] += flux*psfs[img].evaluate(x[i][j] - xx,
-																y[i][j] - yy);
-				}
+				images[img][i][j] += flux*psfs[img].evaluate(x[i][j] - xx,
+															y[i][j] - yy);
 			}
 		}
 	}
+}
+
+void MyModel::calculate_images()
+{
+    for(size_t i=0; i<images.size(); ++i)
+        calculate_image(i);
 }
 
 double MyModel::perturb(RNG& rng)
@@ -112,7 +116,7 @@ double MyModel::perturb(RNG& rng)
 		{
 			int which = rng.rand_int(psfs.size());
 			logH += psfs[which].perturb(rng);
-			calculate_images();
+			calculate_image(which);
 		}
 		if(what == 1)
 		{
@@ -129,7 +133,7 @@ double MyModel::perturb(RNG& rng)
 			int which = rng.rand_int(backgrounds.size());
 			backgrounds[which] += 2000.*rng.randh();
 			wrap(backgrounds[which], -1000., 1000.);
-			calculate_images();
+			calculate_image(which);
 		}
 	}
 
