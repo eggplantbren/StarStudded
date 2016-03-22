@@ -12,7 +12,7 @@ class Lookup
 {
 	private:
 		int num;
-		double xMin, xMax, dx;
+		double xMin, xMax, dx, one_over_dx;
 		std::vector<double> _exp; // exp(-x) for x >= 0
 
 		Lookup();
