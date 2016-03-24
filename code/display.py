@@ -32,7 +32,7 @@ for i in range(0, posterior_sample.shape[0]):
         gca().set_yticks([])
 
         subplot(num_images, 2, 2 + 2*j)
-        imshow((img - data[j, :, :]), interpolation='nearest', cmap='coolwarm')
+        imshow((img - data[j, :, :])*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
         title('Residuals')
         gca().set_xticks([])
         gca().set_yticks([])
