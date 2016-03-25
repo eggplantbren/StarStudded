@@ -51,11 +51,6 @@ void MyModel::calculate_image(int img)
 	images[img].assign(Data::get_instance().get_ni(),
 					   vector<double>(Data::get_instance().get_nj(), 0.));
 
-    // Assign background value
-	for(int i=0; i<Data::get_instance().get_ni(); i++)
-		for(int j=0; j<Data::get_instance().get_nj(); j++)
-			images[img][i][j] = backgrounds[img]*signs[img];
-
 	// Position and flux of a star
 	double xx, yy, flux;
 	double ii, jj;
@@ -147,8 +142,6 @@ double MyModel::perturb(RNG& rng)
             // Possible sign flip
             if(rng.rand() <= 0.5)
                 signs[which] *= -1;
-
-			calculate_image(which);
 		}
 	}
 
@@ -161,17 +154,19 @@ double MyModel::log_likelihood() const
 	const vector< vector< vector<double> > >& sig = Data::get_instance().get_sigmas();
 
 	double logL = 0.;
-	double var;
+	double bg, var;
 
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
+        bg = backgrounds[img]*signs[img];
+
 		for(int i=0; i<Data::get_instance().get_ni(); i++)
 		{
 			for(int j=0; j<Data::get_instance().get_nj(); j++)
 			{
 				var = sigmas[img]*sigmas[img] + sig[img][i][j]*sig[img][i][j];
 				logL += -0.5*log(2.*M_PI*var)
-					-0.5*pow(data[img][i][j] - images[img][i][j], 2)/var;
+					-0.5*pow(data[img][i][j] - (bg + images[img][i][j]), 2)/var;
 			}
 		}
 	}
@@ -183,10 +178,14 @@ void MyModel::print(std::ostream& out) const
 {
 	out<<setprecision(5);
 
+    double bg;
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
+    {
+        bg = backgrounds[img]*signs[img];
 		for(int i=0; i<Data::get_instance().get_ni(); i++)
 			for(int j=0; j<Data::get_instance().get_nj(); j++)
-				out<<images[img][i][j]<<' ';
+				out<<(bg + images[img][i][j])<<' ';
+    }
 	out<<setprecision(10);
 	objects.print(out); out<<' ';
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
