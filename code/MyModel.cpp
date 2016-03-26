@@ -176,7 +176,7 @@ double MyModel::log_likelihood() const
 
 void MyModel::print(std::ostream& out) const
 {
-	out<<setprecision(5);
+	out<<setprecision(6);
 
     double bg;
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
