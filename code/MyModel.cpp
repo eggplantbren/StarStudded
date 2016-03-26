@@ -25,6 +25,7 @@ void MyModel::from_prior(RNG& rng)
 	objects.from_prior(rng);
 	for(size_t i=0; i<psfs.size(); i++)
 		psfs[i].from_prior(rng);
+	calculate_images(false);
 
 	for(size_t i=0; i<backgrounds.size(); ++i)
     {
@@ -32,24 +33,27 @@ void MyModel::from_prior(RNG& rng)
         signs[i] = (rng.rand() <= 0.5)?(1):(-1);
     }
 
-	calculate_images();
-
 	for(size_t i=0; i<sigmas.size(); i++)
 		sigmas[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
 }
 
-void MyModel::calculate_image(int img)
+void MyModel::calculate_image(int img, bool update)
 {
     // Get coordinate stuff from data
 	const vector< vector<double> >& x = Data::get_instance().get_x_rays();
 	const vector< vector<double> >& y = Data::get_instance().get_y_rays();
 
 	// Components
-	const vector< vector<double> >& components = objects.get_components();
+	const vector< vector<double> >& components = (update)?
+                                                 (objects.get_added()):
+                                                 (objects.get_components());
 
 	// Zero the image
-	images[img].assign(Data::get_instance().get_ni(),
-					   vector<double>(Data::get_instance().get_nj(), 0.));
+    if(!update)
+    {
+	    images[img].assign(Data::get_instance().get_ni(),
+					       vector<double>(Data::get_instance().get_nj(), 0.0));
+    }
 
 	// Position and flux of a star
 	double xx, yy, flux;
@@ -94,10 +98,10 @@ void MyModel::calculate_image(int img)
 	}
 }
 
-void MyModel::calculate_images()
+void MyModel::calculate_images(bool update)
 {
     for(size_t i=0; i<images.size(); ++i)
-        calculate_image(i);
+        calculate_image(i, update);
 }
 
 double MyModel::perturb(RNG& rng)
@@ -107,7 +111,7 @@ double MyModel::perturb(RNG& rng)
 	if(rng.rand() <= 0.5)
 	{
 		logH += objects.perturb(rng);
-		calculate_images();
+		calculate_images(objects.get_removed().size() == 0);
 	}
 	else
 	{
@@ -116,7 +120,7 @@ double MyModel::perturb(RNG& rng)
 		{
 			int which = rng.rand_int(psfs.size());
 			logH += psfs[which].perturb(rng);
-			calculate_image(which);
+			calculate_image(which, false);
 		}
 		if(what == 1)
 		{

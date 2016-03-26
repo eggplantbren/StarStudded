@@ -26,8 +26,11 @@ class MyModel
 		std::vector< std::vector< std::vector<double> > > images;
 
         /****** Private member functions ******/
-        void calculate_image(int img);
-		void calculate_images();
+        // Recalculate all model images
+		void calculate_images(bool update);
+
+        // Recalculate one model image
+        void calculate_image(int img, bool update);
 
 	public:
 		MyModel();
