@@ -52,11 +52,11 @@ void PSF::sync()
 void PSF::from_prior(RNG& rng)
 {
 	// Log-uniform between 1 and 50 pixel widths
-	sigma2 = exp(log(1.0) + log(50.0)*rng.rand());
+	sigma2 = exp(log(1.0) + log(50.0)*rng.rand())*Data::get_instance().get_dx();
     sigma1 = sigma2*rng.rand();
 
 	weight = rng.rand();
-	q = 0.1 + 0.9*rng.rand();
+	q = exp(0.3*rng.randn());
 	theta = M_PI*rng.rand();
 
 	sync();
@@ -74,14 +74,14 @@ double PSF::perturb(RNG& rng)
 	}
 	else if(which == 1)
 	{
-        sigma1 /= sigma2;
+        sigma1 /= (sigma2*Data::get_instance().get_dx());
 
         sigma2 = log(sigma2);
         sigma2 += log(50.0)*rng.randh();
         wrap(sigma2, log(1.0), log(50.0));
         sigma2 = exp(sigma2);
 
-        sigma1 *= sigma2;
+        sigma1 *= (sigma2*Data::get_instance().get_dx());
 	}
 	else if(which == 2)
 	{
@@ -90,8 +90,11 @@ double PSF::perturb(RNG& rng)
 	}
 	else if(which == 3)
 	{
-		q += 0.9*rng.randh();
-		wrap(q, 0.1, 1.);
+		q = log(q);
+        logH -= -0.5*pow(q/0.3, 2);
+        q += 0.3*rng.randh();
+        logH += -0.5*pow(q/0.3, 2);
+        q = exp(q);
 	}
 	else
 	{
