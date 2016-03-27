@@ -74,14 +74,15 @@ double PSF::perturb(RNG& rng)
 	}
 	else if(which == 1)
 	{
-        sigma1 /= (sigma2*Data::get_instance().get_dx());
+        sigma1 /= sigma2;
 
         sigma2 = log(sigma2);
         sigma2 += log(50.0)*rng.randh();
-        wrap(sigma2, log(1.0), log(50.0));
+        wrap(sigma2, log(1.0*Data::get_instance().get_dx()),
+                     log(50.0*Data::get_instance().get_dx()));
         sigma2 = exp(sigma2);
 
-        sigma1 *= (sigma2*Data::get_instance().get_dx());
+        sigma1 *= sigma2;
 	}
 	else if(which == 2)
 	{
