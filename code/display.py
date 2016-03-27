@@ -10,14 +10,14 @@ def stretch(x):
 os.system('rm Frames/*.png')
 
 # Load files (DNest4 output and data files)
-metadata = loadtxt('Data/fink_metadata.txt')
+metadata = loadtxt('Data/test_metadata.txt')
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
 
 posterior_sample = atleast_2d(dn.my_loadtxt('posterior_sample.txt'))
-data = np.reshape(loadtxt('Data/fink_image.txt'), (num_images, ni, nj))
-sig = np.reshape(loadtxt('Data/fink_sigma.txt'), (num_images, ni, nj))
+data = np.reshape(loadtxt('Data/test_image.txt'), (num_images, ni, nj))
+sig = np.reshape(loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
 figure(figsize=(12, 12))
 for i in range(0, posterior_sample.shape[0]):
