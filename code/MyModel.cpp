@@ -8,9 +8,10 @@ using namespace std;
 using namespace DNest4;
 
 MyModel::MyModel()
-:objects(2 + Data::get_instance().get_num_images(), 100, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
+:objects(2 + Data::get_instance().get_num_images(), 300, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
 Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range()))
-,sigmas(Data::get_instance().get_num_images())
+,sigmas0(Data::get_instance().get_num_images())
+,sigmas1(Data::get_instance().get_num_images())
 ,psfs(Data::get_instance().get_num_images())
 ,backgrounds(Data::get_instance().get_num_images())
 ,signs(Data::get_instance().get_num_images())
@@ -33,8 +34,10 @@ void MyModel::from_prior(RNG& rng)
         signs[i] = (rng.rand() <= 0.5)?(1):(-1);
     }
 
-	for(size_t i=0; i<sigmas.size(); i++)
-		sigmas[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
+	for(size_t i=0; i<sigmas0.size(); ++i)
+		sigmas0[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
+	for(size_t i=0; i<sigmas1.size(); ++i)
+		sigmas1[i] = exp(tan(M_PI*(0.97*rng.rand() - 0.485)));
 }
 
 void MyModel::calculate_image(int img, bool update)
@@ -124,13 +127,21 @@ double MyModel::perturb(RNG& rng)
 		}
 		if(what == 1)
 		{
-			int which = rng.rand_int(sigmas.size());
-			sigmas[which] = log(sigmas[which]);
-			sigmas[which] = (atan(sigmas[which])/M_PI + 0.485)/0.97;
-			sigmas[which] += rng.randh();
-			wrap(sigmas[which], 0., 1.);
-			sigmas[which] = tan(M_PI*(0.97*sigmas[which] - 0.485));
-			sigmas[which] = exp(sigmas[which]);
+			int which = rng.rand_int(sigmas0.size());
+
+			sigmas0[which] = log(sigmas0[which]);
+			sigmas0[which] = (atan(sigmas0[which])/M_PI + 0.485)/0.97;
+			sigmas0[which] += rng.randh();
+			wrap(sigmas0[which], 0., 1.);
+			sigmas0[which] = tan(M_PI*(0.97*sigmas0[which] - 0.485));
+			sigmas0[which] = exp(sigmas0[which]);
+
+			sigmas1[which] = log(sigmas1[which]);
+			sigmas1[which] = (atan(sigmas1[which])/M_PI + 0.485)/0.97;
+			sigmas1[which] += rng.randh();
+			wrap(sigmas1[which], 0., 1.);
+			sigmas1[which] = tan(M_PI*(0.97*sigmas1[which] - 0.485));
+			sigmas1[which] = exp(sigmas1[which]);
 		}
 		if(what == 2)
 		{
@@ -168,7 +179,10 @@ double MyModel::log_likelihood() const
 		{
 			for(int j=0; j<Data::get_instance().get_nj(); j++)
 			{
-				var = sigmas[img]*sigmas[img] + sig[img][i][j]*sig[img][i][j];
+				var = sig[img][i][j]*sig[img][i][j]
+                        + sigmas0[img]*sigmas0[img]
+                        + sigmas1[img]*images[img][i][j];
+
 				logL += -0.5*log(2.*M_PI*var)
 					-0.5*pow(data[img][i][j] - (bg + images[img][i][j]), 2)/var;
 			}
@@ -192,8 +206,8 @@ void MyModel::print(std::ostream& out) const
     }
 	out<<setprecision(10);
 	objects.print(out); out<<' ';
-	for(int img=0; img<Data::get_instance().get_num_images(); img++)
-		out<<sigmas[img]<<' ';
+	for(int img=0; img<Data::get_instance().get_num_images(); ++img)
+		out<<sigmas0[img]<<' '<<sigmas1[img]<<' ';
 }
 
 string MyModel::description() const

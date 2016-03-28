@@ -13,7 +13,9 @@ class MyModel
 		DNest4::RJObject<MyConditionalPrior> objects;
 
 		// Noise standard deviation for each image
-		std::vector<double> sigmas;
+        // sigma1 = constant level, sigma2 = scale with image
+		std::vector<double> sigmas0;
+        std::vector<double> sigmas1;
 
 		// PSF model for each image
 		std::vector<PSF> psfs;
