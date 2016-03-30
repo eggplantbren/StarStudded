@@ -14,14 +14,17 @@ metadata = loadtxt('Data/test_metadata.txt')
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
+max_num_stars = 300
+num_pixels = ni*nj*num_images
 
 posterior_sample = atleast_2d(dn.my_loadtxt('posterior_sample.txt'))
 data = np.reshape(loadtxt('Data/test_image.txt'), (num_images, ni, nj))
 sig = np.reshape(loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
-stars = posterior_sample[:,30009:(30009 + 300*(2 + num_images))]
-stars_x = stars[:,   0:300]
-stars_y = stars[:, 300:600]
+stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*num_images + max_num_stars*(2 + num_images))]
+stars_x = stars[:, 0:max_num_stars]
+stars_y = stars[:, max_num_stars:2*max_num_stars]
+print(stars.shape)
 
 figure(figsize=(12, 12))
 for i in range(0, posterior_sample.shape[0]):
@@ -34,7 +37,7 @@ for i in range(0, posterior_sample.shape[0]):
             imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='Blues')
 
         which = stars_x[i, :] != 0.0
-        plot(stars_x[i, which], stars_y[i, which], 'wo', alpha=0.25)
+        plot(stars_x[i, which], stars_y[i, which], 'wo', markersize=3)
         axis(metadata[3:7])
 
         title('Model {i}'.format(i=(i+1)))
