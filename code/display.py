@@ -21,9 +21,8 @@ stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*n
 stars_x = stars[:, 0:max_num_stars]
 stars_y = stars[:, max_num_stars:2*max_num_stars]
 
+plt.figure(figsize=(12, 12))
 for i in range(0, posterior_sample.shape[0]):
-    plt.figure(figsize=(12, 12))
-
     for j in range(0, num_images):
         plt.subplot(num_images, 2, 1 + 2*j)
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
