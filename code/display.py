@@ -21,10 +21,12 @@ stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*n
 stars_x = stars[:, 0:max_num_stars]
 stars_y = stars[:, max_num_stars:2*max_num_stars]
 
-plt.figure(figsize=(12, 12))
+fig = plt.figure(figsize=(12, 12))
+
 for i in range(0, posterior_sample.shape[0]):
     for j in range(0, num_images):
         plt.subplot(num_images, 2, 1 + 2*j)
+        plt.hold(False)
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
         try:
             plt.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
@@ -42,11 +44,13 @@ for i in range(0, posterior_sample.shape[0]):
         ax = plt.gca()
 
         plt.subplot(num_images, 2, 2 + 2*j)
-        plt.imshow((img - data[j, :, :])*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
+        resid = img - data[j, :, :]
+        plt.imshow(resid, interpolation='nearest', cmap='coolwarm')
         plt.title('Residuals')
         plt.gca().set_xticks([])
         plt.gca().set_yticks([])
 
+    plt.subplots_adjust(wspace=-0.1)
     plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png', bbox_inches='tight')
     print('Saved Frames/' + '%0.6d' % (i + 1) + '.png')
 plt.show()
