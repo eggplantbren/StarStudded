@@ -1,0 +1,27 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{dsfont}
+
+\newcommand{\data}{\textnormal{data}}
+
+\begin{document}
+
+\section{Decision Theory}
+Now we have a posterior distribution $p(C|\data)$ for the catalog
+\begin{eqnarray}
+C = \left\{N,\{x_i, y_i, \{f_{ij}\}\}_{i=1}^N \right\}
+\end{eqnarray}
+we might want to choose a point estimate catalog $\hat{C}$ which
+maximises the expected value of a utility function $U(\hat{C}, C)$.
+
+The expected utility is
+\begin{eqnarray}
+\mathds{E}\left[U(\hat{C}, C)\right]
+&=&
+\int U(\hat{C}, C) p(C | \data) \, dC \\
+&\approx&
+\frac{1}{n} \sum_{i=1}^n U(\hat{C}, C_i).
+\end{eqnarray}
+
+
+\end{document}
+

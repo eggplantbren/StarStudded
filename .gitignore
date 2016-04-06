@@ -8,3 +8,6 @@ weights.txt
 main
 __pycache__
 *.pyc
+doc/ms.aux
+doc/ms.log
+doc/ms.pdf
