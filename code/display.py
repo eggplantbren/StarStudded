@@ -4,9 +4,10 @@ import os
 import dnest4.deprecated as dn
 
 os.system('rm Frames/*.png')
+os.system('rm movie.mkv')
 
 # Load files (DNest4 output and data files)
-metadata = np.loadtxt('Data/test_metadata.txt')
+metadata = np.loadtxt('Data/anna_metadata.txt')
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
@@ -14,8 +15,8 @@ max_num_stars = 300
 num_pixels = ni*nj*num_images
 
 posterior_sample = np.atleast_2d(dn.my_loadtxt('posterior_sample.txt'))
-data = np.reshape(np.loadtxt('Data/test_image.txt'), (num_images, ni, nj))
-sig = np.reshape(np.loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
+data = np.reshape(np.loadtxt('Data/anna_image.txt'), (num_images, ni, nj))
+sig = np.reshape(np.loadtxt('Data/anna_sigma.txt'), (num_images, ni, nj))
 
 stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*num_images + max_num_stars*(2 + num_images))]
 stars_x = stars[:, 0:max_num_stars]
@@ -45,7 +46,7 @@ for i in range(0, posterior_sample.shape[0]):
 
         plt.subplot(num_images, 2, 2 + 2*j)
         resid = img - data[j, :, :]
-        plt.imshow(resid, interpolation='nearest', cmap='coolwarm')
+        plt.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
         plt.title('Residuals')
         plt.gca().set_xticks([])
         plt.gca().set_yticks([])
@@ -54,4 +55,7 @@ for i in range(0, posterior_sample.shape[0]):
     plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png', bbox_inches='tight')
     print('Saved Frames/' + '%0.6d' % (i + 1) + '.png')
 plt.show()
+
+os.system('ffmpeg -r 10 -i Frames/%06d.png -c:v h264 -b:v 4192k movie.mkv')
+
 
