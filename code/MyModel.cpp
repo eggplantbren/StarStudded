@@ -9,7 +9,7 @@ using namespace DNest4;
 
 MyModel::MyModel()
 :objects(2 + Data::get_instance().get_num_images(), 300, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
-Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range()))
+Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range()), PriorType::log_uniform)
 ,sigmas0(Data::get_instance().get_num_images())
 ,sigmas1(Data::get_instance().get_num_images())
 ,psfs(Data::get_instance().get_num_images())
