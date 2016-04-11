@@ -34,7 +34,18 @@ catalog estimate $\hat{C}$ which maximises the approximate expected utility.
 \section{A suggested utility function}
 This is just an idea, and I am open to alternative suggestions.
 
-A catalog is a measure.
+A catalog is a measure. It also implies other measures (e.g. a blurred catalog
+is like an image).
+
+I propose
+\begin{eqnarray}
+U(\hat{C}, C) &=& \textnormal{Div}\left(m(x, y; \hat{C}); m(x, y; C)\right)
+\end{eqnarray}
+where $\textnormal{Div}$ is the divergence function for measures (from Knuth
+and Skilling), and the two $m$s are measures over the sky produced from the
+point estimate catalog and the true catalog respectively.
+
+{\bf How to handle multiple bands?}
 
 
 \end{document}
