@@ -1,5 +1,6 @@
 \documentclass[a4paper, 12pt]{article}
 \usepackage{dsfont}
+\usepackage[left=2.5cm, right=2.5cm]{geometry}
 
 \newcommand{\data}{\textnormal{data}}
 
@@ -11,16 +12,29 @@ Now we have a posterior distribution $p(C|\data)$ for the catalog
 C = \left\{N,\{x_i, y_i, \{f_{ij}\}\}_{i=1}^N \right\}
 \end{eqnarray}
 we might want to choose a point estimate catalog $\hat{C}$ which
-maximises the expected value of a utility function $U(\hat{C}, C)$.
+maximises the expected value of a utility function $U(\hat{C}, C)$.\\
 
 The expected utility is
 \begin{eqnarray}
 \mathds{E}\left[U(\hat{C}, C)\right]
 &=&
-\int U(\hat{C}, C) p(C | \data) \, dC \\
+\int U(\hat{C}, C) p(C | \data) \, dC,
+\end{eqnarray}
+which can be approximated by averaging over a set $\{C_i\}_{i=1}^n$
+of catalogs produced from a Monte Carlo sampling of the posterior distribution
+$p(C|\data)$:
+\begin{eqnarray}
+\mathds{E}\left[U(\hat{C}, C)\right]
 &\approx&
 \frac{1}{n} \sum_{i=1}^n U(\hat{C}, C_i).
 \end{eqnarray}
+Once we have sampled the posterior, we can do an optimisation to choose the
+catalog estimate $\hat{C}$ which maximises the approximate expected utility.
+
+\section{A suggested utility function}
+This is just an idea, and I am open to alternative suggestions.
+
+A catalog is a measure.
 
 
 \end{document}
