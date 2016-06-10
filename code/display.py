@@ -15,7 +15,7 @@ nj = int(metadata[2])
 max_num_stars = 300
 num_pixels = ni*nj*num_images
 
-posterior_sample = np.atleast_2d(dn.my_loadtxt('posterior_sample.txt'))
+posterior_sample = np.atleast_2d(dn.my_loadtxt('posterior_sample.txt', single_precision=True))
 data = np.reshape(np.loadtxt('Data/test_image.txt'), (num_images, ni, nj))
 sig = np.reshape(np.loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
