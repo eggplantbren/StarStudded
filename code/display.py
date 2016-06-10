@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 import os
 import dnest4.deprecated as dn
 
+os.system('mkdir Frames')
 os.system('rm Frames/*.png')
 os.system('rm movie.mkv')
 
 # Load files (DNest4 output and data files)
-metadata = np.loadtxt('Data/anna_metadata.txt')
+metadata = np.loadtxt('Data/test_metadata.txt')
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
@@ -15,8 +16,8 @@ max_num_stars = 300
 num_pixels = ni*nj*num_images
 
 posterior_sample = np.atleast_2d(dn.my_loadtxt('posterior_sample.txt'))
-data = np.reshape(np.loadtxt('Data/anna_image.txt'), (num_images, ni, nj))
-sig = np.reshape(np.loadtxt('Data/anna_sigma.txt'), (num_images, ni, nj))
+data = np.reshape(np.loadtxt('Data/test_image.txt'), (num_images, ni, nj))
+sig = np.reshape(np.loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
 stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*num_images + max_num_stars*(2 + num_images))]
 stars_x = stars[:, 0:max_num_stars]
