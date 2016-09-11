@@ -3,9 +3,14 @@ import matplotlib.pyplot as plt
 import os
 import dnest4.deprecated as dn
 
-os.system('mkdir Frames')
-os.system('rm Frames/*.png')
-os.system('rm movie.mkv')
+print("WARNING! This will delete\
+ movie.mkv and the Frames/ directory, if these exist.")
+ch = input("Continue? y/n: ")
+if ch != "y" and ch != "Y":
+    exit()
+
+os.system("rm -rf Frames/ movie.mkv")
+os.mkdir("Frames")
 
 # Load files (DNest4 output and data files)
 metadata = np.loadtxt('Data/test_metadata.txt')
