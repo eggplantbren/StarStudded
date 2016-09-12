@@ -2,13 +2,14 @@
 #include "DNest4/code/Utils.h"
 #include "Data.h"
 #include <cmath>
+#include <sstream>
 #include "Lookup.h"
 
 using namespace std;
 using namespace DNest4;
 
 MyModel::MyModel()
-:objects(2 + Data::get_instance().get_num_images(), 300, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
+:objects(2 + Data::get_instance().get_num_images(), max_num_stars, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
 Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range()), PriorType::log_uniform)
 ,sigmas0(Data::get_instance().get_num_images())
 ,sigmas1(Data::get_instance().get_num_images())
@@ -212,6 +213,31 @@ void MyModel::print(std::ostream& out) const
 
 string MyModel::description() const
 {
-	return string("objects");
+    stringstream s;
+    for(int img=0; img<Data::get_instance().get_num_images(); img++)
+    {
+		for(int i=0; i<Data::get_instance().get_ni(); i++)
+			for(int j=0; j<Data::get_instance().get_nj(); j++)
+				s<<"model_image["<<img<<"]["<<i<<"]["<<j<<"], ";
+    }
+    s<<"num_dimensions_star, max_num_stars, ";
+
+	for(int img=0; img<Data::get_instance().get_num_images(); img++)
+		s<<"fluxlim["<<img<<"], gamma["<<img<<"], ";
+
+    s<<"num_stars, ";
+
+    for(size_t i=0; i<max_num_stars; ++i)
+        s<<"star_x["<<i<<"], ";
+    for(size_t i=0; i<max_num_stars; ++i)
+        s<<"star_y["<<i<<"], ";
+	for(int img=0; img<Data::get_instance().get_num_images(); img++)
+        for(size_t i=0; i<max_num_stars; ++i)
+            s<<"star_flux["<<img<<"]["<<i<<"], ";
+
+	for(int img=0; img<Data::get_instance().get_num_images(); ++img)
+		s<<"sigma0["<<img<<"], sigma1["<<img<<"], ";
+
+	return s.str();
 }
 

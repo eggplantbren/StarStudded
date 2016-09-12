@@ -9,6 +9,8 @@
 class MyModel
 {
 	private:
+        static const size_t max_num_stars = 300;
+
 		// The stars
 		DNest4::RJObject<MyConditionalPrior> objects;
 
