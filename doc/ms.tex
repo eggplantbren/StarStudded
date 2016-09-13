@@ -45,6 +45,7 @@
 \usepackage{amssymb}	% Extra maths symbols
 \usepackage{dsfont}
 \usepackage{microtype}
+\usepackage[utf8]{inputenc}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -100,6 +101,10 @@ methods: data analysis --- methods: statistical
 
 \section{Introduction}
 
+
+The implementation is in C++ and makes use of the DNest4 package \citep{dnest4},
+which implements the Diffusive Nested Sampling algorithm \citep{dns}.
+
 \section{Decision Theory}
 Now we have a posterior distribution $p(C|\data)$ for the catalog
 \begin{eqnarray}
@@ -125,11 +130,7 @@ $p(C|\data)$:
 Once we have sampled the posterior, we can do an optimisation to choose the
 catalog estimate $\hat{C}$ which maximises the approximate expected utility.
 
-\section{A suggested utility function}
-This is just an idea, and I am open to alternative suggestions.
-
-A catalog is a measure. It also implies other measures (e.g. a blurred catalog
-is like an image).
+\section{A utility aimed at the ``next image''}
 
 I propose
 \begin{eqnarray}
@@ -139,7 +140,11 @@ where $\textnormal{Div}$ is the divergence function for measures (from Knuth
 and Skilling), and the two $m$s are measures over the sky produced from the
 point estimate catalog and the true catalog respectively.
 
-{\bf How to handle multiple bands?}
+
+\section{A utility function aimed at a ``particular star''}
+
+
+\section{A utility function aimed at the luminosity function}
 
 
 
