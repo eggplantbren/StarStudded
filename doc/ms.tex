@@ -57,7 +57,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\data}{D}
+\newcommand{\params}{\boldsymbol{\theta}}
+\newcommand{\data}{\boldsymbol{D}}
 
 %%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
 
@@ -106,6 +107,19 @@ The implementation is in C++ and makes use of the DNest4 package \citep{dnest4},
 which implements the Diffusive Nested Sampling algorithm \citep{dns}.
 
 \section{Decision Theory}
+In Bayesian inference, the posterior distribution for the parameters
+$\params$ given data $\data$ is proporitional to the prior $p(\params)$
+times the likelihood $p(\data | \params)$.
+\begin{align}
+p(\params | \data) &= \frac{p(\params)p(\data | \params)}{p(\data)}.
+\end{align}
+Bayesian inference (i.e., probability theory) is used to model uncertainty
+because any assignment of real values to
+ordered pairs of propositions $A$, $B$, that satisfies basic
+symmetries, is equivalent to a conditional probability $P(A | B)$.
+\citep{knuth2012foundations}.
+
+
 Now we have a posterior distribution $p(C|\data)$ for the catalog
 \begin{eqnarray}
 C = \left\{N,\{x_i, y_i, \{f_{ij}\}\}_{i=1}^N \right\}
