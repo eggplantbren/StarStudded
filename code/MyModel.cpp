@@ -182,7 +182,7 @@ double MyModel::log_likelihood() const
 			{
 				var = sig[img][i][j]*sig[img][i][j]
                         + sigmas0[img]*sigmas0[img]
-                        + sigmas1[img]*images[img][i][j];
+                        + sigmas1[img]*(bg + images[img][i][j]);
 
 				logL += -0.5*log(2.*M_PI*var)
 					-0.5*pow(data[img][i][j] - (bg + images[img][i][j]), 2)/var;
@@ -209,6 +209,12 @@ void MyModel::print(std::ostream& out) const
 	objects.print(out); out<<' ';
 	for(int img=0; img<Data::get_instance().get_num_images(); ++img)
 		out<<sigmas0[img]<<' '<<sigmas1[img]<<' ';
+
+    for(int img=0; img<Data::get_instance().get_num_images(); ++img)
+    {
+        bg = backgrounds[img]*signs[img];
+        out<<bg<<' ';
+    }
 }
 
 string MyModel::description() const
@@ -237,6 +243,9 @@ string MyModel::description() const
 
 	for(int img=0; img<Data::get_instance().get_num_images(); ++img)
 		s<<"sigma0["<<img<<"], sigma1["<<img<<"], ";
+
+    for(int img=0; img<Data::get_instance().get_num_images(); ++img)
+        s<<"bg["<<img<<"], ";
 
 	return s.str();
 }
