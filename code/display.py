@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import dnest4.deprecated as dn
+import dnest4.classic as dn4
 
 print("WARNING! This will delete\
  movie.mkv and the Frames/ directory, if these exist.")
@@ -20,7 +20,8 @@ nj = int(metadata[2])
 max_num_stars = 300
 num_pixels = ni*nj*num_images
 
-posterior_sample = np.atleast_2d(dn.my_loadtxt('posterior_sample.txt', single_precision=True))
+posterior_sample = dn4.my_loadtxt('posterior_sample.txt', single_precision=True)
+indices = dn4.load_column_names("posterior_sample.txt")["indices"]
 data = np.reshape(np.loadtxt('Data/test_image.txt'), (num_images, ni, nj))
 sig = np.reshape(np.loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
 
@@ -51,9 +52,13 @@ for i in range(0, posterior_sample.shape[0]):
         ax = plt.gca()
 
         plt.subplot(num_images, 2, 2 + 2*j)
-        resid = img - data[j, :, :]
+        var = sig[j, :, :]**2\
+                + posterior_sample[i, indices["sigma0[{j}]".format(j=j)]]\
+                + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img
+        resid = (img - data[j, :, :])/np.sqrt(var)
+
         plt.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
-        plt.title('Residuals')
+        plt.title('Standardised Residuals')
         plt.gca().set_xticks([])
         plt.gca().set_yticks([])
 
