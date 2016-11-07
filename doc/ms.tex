@@ -67,13 +67,14 @@
 \title[]
 {Probabilistic and decision theoretic catalogs}
     
-\author[Brewer, Malz, and Leung]{%
-  Brendon~J.~Brewer$^{1}$\thanks{To whom correspondence should be addressed. Email: {\tt bj.brewer@auckland.ac.nz}}, Alex Malz$^2$, Daisy Leung$^3$\\
+\author[Brewer, Malz, Leung, and Lang]{%
+  Brendon~J.~Brewer$^{1}$\thanks{To whom correspondence should be addressed. Email: {\tt bj.brewer@auckland.ac.nz}}, Alex Malz$^2$, Daisy Leung$^3$, Dustin Lang$^4$\\
   \medskip\\
   $^1$Department of Statistics, The University of Auckland, Private Bag 92019,
         Auckland 1142, New Zealand\\
   $^2$NYU\\
-  $^3$Cornell}
+  $^3$Cornell\\
+  $^4$Dunno}
 % These dates will be filled out by the publisher
 \date{}
 
@@ -147,18 +148,27 @@ catalog estimate $\hat{C}$ which maximises the approximate expected utility.
 Idea for quick implementation: use the DNest4 samples ({\tt sample.txt})
 as the set of possible decisions.
 
-\section{A utility aimed at the ``next image''}
+\section{A utility related to images}
+Again, let $\hat{C}$ be the 
 
 I propose
 \begin{eqnarray}
 U(\hat{C}, C) &=& \textnormal{Div}\left(m(x, y; \hat{C}); m(x, y; C)\right)
 \end{eqnarray}
-where $\textnormal{Div}$ is unique divergence of
+where $\textnormal{Div}$ is the unique divergence of
 two measures \citep{knuth2012foundations}.
 
-, and the two $m$s are measures over the sky produced from the
-point estimate catalog and the true catalog respectively.
+The two $m(x, y)$ functions are measures over the sky produced from the
+point estimate catalog and the true catalog respectively. They cannot be
+measures where the stars create point masses, because the divergence would
+be infinite unless the stars coincided.
 
+The procedure here resembles how we fit the catalog to the images in the
+first place. But we're not trying to optimize the fit to the image. Instead,
+we're trying to find the posterior sample that is as `close' as possible to
+all of the other posterior samples, as defined by the divergence. That catalog
+that is most representative of all catalogs that are probable under the
+posterior distribution is the best single catalog we could asset.
 
 \section{A utility function aimed at a ``particular star''}
 
