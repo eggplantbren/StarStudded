@@ -89,6 +89,8 @@
 
 % Abstract of the paper
 \begin{abstract}
+Detecting and characterizing the sources in an image is a fundamental task
+in astronomy. 
 \end{abstract}
 
 % Select between one and six entries from the list of approved keywords.
@@ -102,12 +104,23 @@ methods: data analysis --- methods: statistical
 %%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
 
 \section{Introduction}
+How many sources are in this image? Where are they located, how bright are they,
+and what are their other properties (e.g. shape-related properties)? These
+are fundamental questions in astronomy.
 
 
-The implementation is in C++ and makes use of the DNest4 package \citep{dnest4},
-which implements the Diffusive Nested Sampling algorithm \citep{dns}.
+\citet{starfield}
 
-\section{Decision Theory}
+In this paper, we describe a new implementation of the \citet{starfield}
+algorithm, which samples the posterior distribution for possible catalogs
+given the data. The implementation is in C++ and makes use of the DNest4 package
+\citep{dnest4}, which implements the Diffusive Nested Sampling algorithm
+\citep{dns}. We also discuss the question of how to choose one optimal catalog
+rather than presenting a sample of plausible catalogs. We do this formally
+using decision theory.
+
+
+\section{Inference and decision theory}
 In Bayesian inference, the posterior distribution for the parameters
 $\params$ given data $\data$ is proporitional to the prior $p(\params)$
 times the likelihood $p(\data | \params)$.
@@ -213,22 +226,6 @@ the University of Auckland. We would also like to thank the Astro Hack Week
 \end{document}
 
 % End of mnras_template.tex
-
-
-
-
-
-
-
-
-\documentclass[a4paper, 12pt]{article}
-\usepackage{dsfont}
-\usepackage[left=2.5cm, right=2.5cm]{geometry}
-
-\newcommand{\data}{\textnormal{data}}
-
-\begin{document}
-
 
 
 \end{document}
