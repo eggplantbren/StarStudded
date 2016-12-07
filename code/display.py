@@ -13,7 +13,7 @@ os.system("rm -rf Frames/ movie.mkv")
 os.mkdir("Frames")
 
 # Load files (DNest4 output and data files)
-metadata = np.loadtxt('Data/test_metadata.txt')
+metadata = np.loadtxt('Data/1000_metadata.txt')
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
@@ -22,14 +22,14 @@ num_pixels = ni*nj*num_images
 
 posterior_sample = dn4.my_loadtxt('posterior_sample.txt', single_precision=True)
 indices = dn4.load_column_names("posterior_sample.txt")["indices"]
-data = np.reshape(np.loadtxt('Data/test_image.txt'), (num_images, ni, nj))
-sig = np.reshape(np.loadtxt('Data/test_sigma.txt'), (num_images, ni, nj))
+data = np.reshape(np.loadtxt('Data/1000_image.txt'), (num_images, ni, nj))
+sig = np.reshape(np.loadtxt('Data/1000_sigma.txt'), (num_images, ni, nj))
 
 stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*num_images + max_num_stars*(2 + num_images))]
 stars_x = stars[:, 0:max_num_stars]
 stars_y = stars[:, max_num_stars:2*max_num_stars]
 
-fig = plt.figure(figsize=(12, 12))
+fig = plt.figure(figsize=(12, 8))
 
 for i in range(0, posterior_sample.shape[0]):
     for j in range(0, num_images):
@@ -62,7 +62,6 @@ for i in range(0, posterior_sample.shape[0]):
         plt.gca().set_xticks([])
         plt.gca().set_yticks([])
 
-    plt.subplots_adjust(wspace=-0.1)
     plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png', bbox_inches='tight')
     print('Saved Frames/' + '%0.6d' % (i + 1) + '.png')
 plt.show()
