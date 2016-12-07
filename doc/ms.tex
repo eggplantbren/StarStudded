@@ -98,6 +98,8 @@ data and some assumed prior information. In this paper we present a new
 implementation of this idea for the case of crowded stellar fields.
 We also formally address the question of how to choose a single optimal
 catalog for publication, using concepts from decision theory.
+Due to the computational cost, we suggest this method is only suitable for
+very small images which are of particular interest.
 \end{abstract}
 
 % Select between one and six entries from the list of approved keywords.
@@ -133,6 +135,13 @@ The implementation is in C++ and makes use of the DNest4 package
 \citep{dns}. We also discuss the question of how to choose one optimal catalog
 rather than presenting a sample of plausible catalogs. We do this formally
 using decision theory.
+
+The methods presented here are very computationally intensive, as is common
+for MCMC in thousands of dimensions. Other approximations, such as
+`variational Bayes' \citep[as used by e.g.,][]{regier2016learning} may be
+required for larger images. Therefore, we suggest this software only be used
+on small patches of imaging (less than about 200 $\times$ 200 pixels) that
+are of particular interest.
 
 
 \section{Inference and decision theory}
