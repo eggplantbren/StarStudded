@@ -59,6 +59,8 @@
 
 \newcommand{\params}{\boldsymbol{\theta}}
 \newcommand{\data}{\boldsymbol{D}}
+\newcommand{\catalog}{\boldsymbol{C}}
+\newcommand{\info}{\boldsymbol{I}}
 
 %%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
 
@@ -90,7 +92,12 @@
 % Abstract of the paper
 \begin{abstract}
 Detecting and characterizing the sources in an image is a fundamental task
-in astronomy. 
+in astronomy. This can be regarded as an inference problem, where the goal
+is to determine what statements about the objects are plausible, given the
+data and some assumed prior information. In this paper we present a new
+implementation of this idea for the case of crowded stellar fields.
+We also formally address the question of how to choose a single optimal
+catalog for publication, using concepts from decision theory.
 \end{abstract}
 
 % Select between one and six entries from the list of approved keywords.
@@ -104,16 +111,24 @@ methods: data analysis --- methods: statistical
 %%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
 
 \section{Introduction}
-How many sources are in this image? Where are they located, how bright are they,
+How many sources are in an image? Where are they located, how bright are they,
 and what are their other properties (e.g. shape-related properties)? These
 are fundamental questions in astronomy.
 
 
-\citet{starfield}
+\citet{brewer2013probabilistic} addressed this question from the point of view
+of Bayesian inference, showing how the posterior distribution over the space of possible catalogs can be computed and can enable greater scientific output from
+a dataset, provided the modelling assumptions are sufficiently accurate. In
+particular, the frequency distribution of fluxes at the faint end was much
+more accurately recovered using inference than using standard object detection
+package SExtractor.
 
-In this paper, we describe a new implementation of the \citet{starfield}
-algorithm, which samples the posterior distribution for possible catalogs
-given the data. The implementation is in C++ and makes use of the DNest4 package
+In this paper, we describe a new implementation of the
+\citet{brewer2013probabilistic}
+method, which samples the posterior distribution for possible catalogs
+given the data. 
+
+The implementation is in C++ and makes use of the DNest4 package
 \citep{dnest4}, which implements the Diffusive Nested Sampling algorithm
 \citep{dns}. We also discuss the question of how to choose one optimal catalog
 rather than presenting a sample of plausible catalogs. We do this formally
@@ -122,19 +137,22 @@ using decision theory.
 
 \section{Inference and decision theory}
 In Bayesian inference, the posterior distribution for the parameters
-$\params$ given data $\data$ is proporitional to the prior $p(\params)$
-times the likelihood $p(\data | \params)$.
+$\params$ given data $\data$ and prior information $\info$ is proportional
+to the prior $p(\params | \info)$
+times the likelihood $p(\data | \params, \info)$.
 \begin{align}
-p(\params | \data) &= \frac{p(\params)p(\data | \params)}{p(\data)}.
+p(\params | \data, \info) &=
+    \frac{p(\params | \info)p(\data | \params, \info)}{p(\data | \info)}.
 \end{align}
 Bayesian inference (i.e., probability theory) is used to model uncertainty
 because any assignment of real values to
-ordered pairs of propositions $A$, $B$, that satisfies basic
+ordered pairs of propositions $(A, B)$, that satisfies basic
 symmetries, is equivalent to a conditional probability $P(A | B)$.
-\citep{knuth2012foundations}.
+\citep{knuth2012foundations}. The posterior distribution quantifies the degree
+to which the data $\data$ implies certain conclusions about the value of
+$\theta$, within the context of $\info$.
 
-
-Now we have a posterior distribution $p(C|\data)$ for the catalog
+Now we have a posterior distribution $p(C|\data, \info)$ for the catalog
 \begin{eqnarray}
 C = \left\{N,\{x_i, y_i, \{f_{ij}\}\}_{i=1}^N \right\}
 \end{eqnarray}
