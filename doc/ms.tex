@@ -58,9 +58,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\params}{\boldsymbol{\theta}}
-\newcommand{\data}{\boldsymbol{D}}
+\newcommand{\data}{\boldsymbol{x}}
 \newcommand{\catalog}{\boldsymbol{C}}
 \newcommand{\info}{\boldsymbol{I}}
+\newcommand{\decision}{\texttt{d}}
 
 %%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
 
@@ -143,7 +144,6 @@ required for larger images. Therefore, we suggest this software only be used
 on small patches of imaging (less than about 200 $\times$ 200 pixels) that
 are of particular interest.
 
-
 \section{Inference and decision theory}
 In Bayesian inference, the posterior distribution for the parameters
 $\params$ given data $\data$ and prior information $\info$ is proportional
@@ -160,6 +160,29 @@ symmetries, is equivalent to a conditional probability $P(A | B)$.
 \citep{knuth2012foundations}. The posterior distribution quantifies the degree
 to which the data $\data$ implies certain conclusions about the value of
 $\theta$, within the context of $\info$.
+
+The posterior distribution describes the uncertainty remaining after
+taking the data into account. However, sometimes a concrete decision needs to
+be made, even though there is still uncertainty. Decision theory is the
+tool used for this. Suppose the set of possible decisions is
+$\{\decision_1, \decision_2, ..., \decision_m\}$. A real number called the
+{\em utility} is assigned, as a function of the decision and the
+value of the parameters $\params$:
+\begin{align}
+\textnormal{Utility}(\decision; \params).
+\end{align}
+The utility function describes {\em how good it would be} if a particular
+value of $\params$ turned out to be true, having taken decision $\decision$.
+
+We would like to choose the decision that maximizes the utility, but this is
+impossible when we don't know the value of $\params$. Instead, decision theory
+tells us to maximize the {\em expected value} of the utility with respect
+to the posterior distribution. Therefore the best decision is
+\begin{align}
+\decision_{\rm best} &= \textnormal{argmax}
+\int p(\params | \data, \info)
+        \textnormal{Utility}(\decision; \params) \, d\params.
+\end{align}
 
 Now we have a posterior distribution $p(C|\data, \info)$ for the catalog
 \begin{eqnarray}
