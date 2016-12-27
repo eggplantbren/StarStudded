@@ -12,8 +12,13 @@ if ch != "y" and ch != "Y":
 os.system("rm -rf Frames/ movie.mkv")
 os.mkdir("Frames")
 
+# Open run_data.txt to get data filenames used for the run
+f = open("run_data.txt", "r")
+a, b, c = f.readline()[:-1], f.readline()[:-1], f.readline()[:-1]
+f.close()
+
 # Load files (DNest4 output and data files)
-metadata = np.loadtxt('Data/1000_metadata.txt')
+metadata = np.loadtxt(a)
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
@@ -22,8 +27,8 @@ num_pixels = ni*nj*num_images
 
 posterior_sample = dn4.my_loadtxt('posterior_sample.txt', single_precision=True)
 indices = dn4.load_column_names("posterior_sample.txt")["indices"]
-data = np.reshape(np.loadtxt('Data/1000_image.txt'), (num_images, ni, nj))
-sig = np.reshape(np.loadtxt('Data/1000_sigma.txt'), (num_images, ni, nj))
+data = np.reshape(np.loadtxt(b), (num_images, ni, nj))
+sig = np.reshape(np.loadtxt(c), (num_images, ni, nj))
 
 stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*num_images + max_num_stars*(2 + num_images))]
 stars_x = stars[:, 0:max_num_stars]

@@ -5,6 +5,7 @@ sample.txt
 sample_info.txt
 posterior_sample.txt
 weights.txt
+run_data.txt
 main
 __pycache__
 *.pyc
