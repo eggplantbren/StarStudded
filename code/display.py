@@ -22,7 +22,7 @@ metadata = np.loadtxt(a)
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
-max_num_stars = 300
+max_num_stars = 1500
 num_pixels = ni*nj*num_images
 
 posterior_sample = dn4.my_loadtxt('posterior_sample.txt', single_precision=True)
