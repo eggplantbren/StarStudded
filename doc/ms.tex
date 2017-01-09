@@ -40,12 +40,13 @@
 %%%%% AUTHORS - PLACE YOUR OWN PACKAGES HERE %%%%%
 
 % Only include extra packages if you really need them. Common packages are:
-\usepackage{graphicx}	% Including figure files
 \usepackage{amsmath}	% Advanced maths commands
 \usepackage{amssymb}	% Extra maths symbols
+\usepackage{color}
 \usepackage{dsfont}
-\usepackage{microtype}
+\usepackage{graphicx}	% Including figure files
 \usepackage[utf8]{inputenc}
+\usepackage{microtype}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -62,6 +63,7 @@
 \newcommand{\catalog}{\boldsymbol{C}}
 \newcommand{\info}{\boldsymbol{I}}
 \newcommand{\decision}{\texttt{d}}
+\newcommand{\todo}{\color{red} \bf}
 
 %%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
 
@@ -114,33 +116,42 @@ methods: data analysis --- methods: statistical
 %%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
 
 \section{Introduction}
-How many sources are in an image? Where are they located, how bright are they,
+Given a blurred, noisy image of a patch of sky, can we infer how many
+sources it contains? Where are they located, how bright are they,
 and what are their other properties (e.g. shape-related properties)? These
-are fundamental questions in astronomy.
+are fundamental questions in astronomy. A wide variety of tools have been
+developed for this purpose ({\todo references}) in different situations.
 
-
-\citet{brewer2013probabilistic} addressed this question from the point of view
-of Bayesian inference, showing how the posterior distribution over the space of possible catalogs can be computed and can enable greater scientific output from
+\citet{brewer2013probabilistic} (hereafter BFH13)
+addressed this question from a purist
+Bayesian inference perspective,
+showing how the posterior distribution over the space of possible catalogs can be computed and can enable greater scientific output from
 a dataset, provided the modelling assumptions are sufficiently accurate. In
 particular, the frequency distribution of fluxes at the faint end was much
 more accurately recovered using inference than using standard object detection
-package SExtractor.
+package SExtractor. However, these benefits come at a substantial computational
+cost, so this approach can only be used on small patches of imaging that
+are of particular interest.
 
 In this paper, we describe a new implementation of the
-\citet{brewer2013probabilistic}
+BFH13
 method, which samples the posterior distribution for possible catalogs
-given the data. 
-
+given the data, and calculates the marginal likelihood (the probability of
+the data given the model assumptions).
 The implementation is in C++ and makes use of the DNest4 package
 \citep{dnest4}, which implements the Diffusive Nested Sampling algorithm
-\citep{dns}. We also discuss the question of how to choose one optimal catalog
-rather than presenting a sample of plausible catalogs. We do this formally
-using decision theory.
+\citep{dns}. The model assumptions have been extended to allow for multiple-band
+imaging and non-circular point spread functions (PSFs).
+
+We also discuss the question of how to choose a single optimal catalog for
+publication, rather than presenting a sample of plausible catalogs.
+We do this formally using decision theory.
 
 The methods presented here are very computationally intensive, as is common
 for MCMC in thousands of dimensions. Other approximations, such as
 `variational Bayes' \citep[as used by e.g.,][]{regier2016learning} may be
-required for larger images. Therefore, we suggest this software only be used
+required for larger images. Therefore, as with BHF13,
+we suggest this software only be used
 on small patches of imaging (less than about 200 $\times$ 200 pixels) that
 are of particular interest.
 
