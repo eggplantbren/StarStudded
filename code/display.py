@@ -39,14 +39,13 @@ fig = plt.figure(figsize=(12, 8))
 for i in range(0, posterior_sample.shape[0]):
     for j in range(0, num_images):
         plt.subplot(num_images, 2, 1 + 2*j)
-        plt.hold(False)
+        plt.cla()
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
         try:
             plt.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
         except:
             plt.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='Blues')
 
-        plt.hold(True)
         which = stars_x[i, :] != 0.0
         plt.plot(stars_x[i, which], stars_y[i, which], 'wo', markersize=3)
         plt.axis(metadata[3:7])
