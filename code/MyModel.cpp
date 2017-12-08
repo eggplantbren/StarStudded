@@ -182,7 +182,7 @@ double MyModel::log_likelihood() const
 			{
 				var = sig[img][i][j]*sig[img][i][j]
                         + sigmas0[img]*sigmas0[img]
-                        + sigmas1[img]*(bg + images[img][i][j]);
+                        + sigmas1[img]*images[img][i][j];
 
 				logL += -0.5*log(2.*M_PI*var)
 					-0.5*pow(data[img][i][j] - (bg + images[img][i][j]), 2)/var;
