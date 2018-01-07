@@ -51,8 +51,8 @@ void PSF::sync()
 
 void PSF::from_prior(RNG& rng)
 {
-	// Log-uniform between 1 and 50 pixel widths
-	sigma2 = exp(log(1.0) + log(50.0)*rng.rand())*Data::get_instance().get_dx();
+	// Pareto(1, 1) in pixel widths
+	sigma2 = exp(log(1.0) - log(rng.rand()))*Data::get_instance().get_dx();
     sigma1 = sigma2*rng.rand();
 
 	weight = rng.rand();
@@ -76,11 +76,12 @@ double PSF::perturb(RNG& rng)
 	{
         sigma1 /= sigma2;
 
-        sigma2 = log(sigma2);
-        sigma2 += log(50.0)*rng.randh();
-        wrap(sigma2, log(1.0*Data::get_instance().get_dx()),
-                     log(50.0*Data::get_instance().get_dx()));
-        sigma2 = exp(sigma2);
+        sigma2 = log(sigma2/Data::get_instance().get_dx());
+        sigma2 = 1.0 - exp(-sigma2);
+        sigma2 += rng.randh();
+        wrap(sigma2, 0.0, 1.0);
+        sigma2 = -log(1.0 - sigma2);
+        sigma2 = Data::get_instance().get_dx()*exp(sigma2);
 
         sigma1 *= sigma2;
 	}
