@@ -8,8 +8,9 @@ using namespace DNest4;
 
 int main(int argc, char** argv)
 {
-	Data::get_instance().load("Data/1000_metadata.txt",
-				"Data/1000_image.txt", "Data/1000_sigma.txt");
+	Data::get_instance().load("Data/test_metadata.txt",
+                              "Data/test_image.txt",
+                              "Data/test_sigma.txt");
 
 	Sampler<MyModel> sampler = setup<MyModel>(argc, argv);
 	sampler.run();
