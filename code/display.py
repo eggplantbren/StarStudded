@@ -34,37 +34,34 @@ stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*n
 stars_x = stars[:, 0:max_num_stars]
 stars_y = stars[:, max_num_stars:2*max_num_stars]
 
-fig = plt.figure(figsize=(12, 8))
-
 for i in range(0, posterior_sample.shape[0]):
+
+    plt.clf()
+
     for j in range(0, num_images):
-        plt.subplot(num_images, 2, 1 + 2*j)
-        plt.cla()
+        ax = plt.subplot(num_images, 2, 1 + 2*j)
+        ax.cla()
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
-        try:
-            plt.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
-        except:
-            plt.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='Blues')
+        ax.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
 
         which = stars_x[i, :] != 0.0
-        plt.plot(stars_x[i, which], stars_y[i, which], 'wo', markersize=3)
-        plt.axis(metadata[3:7])
+        ax.plot(stars_x[i, which], stars_y[i, which], 'wo', markersize=3)
+        ax.axis(metadata[3:7])
 
-        plt.title('Model {i}'.format(i=(i+1)))
-        plt.gca().set_xticks([])
-        plt.gca().set_yticks([])
-        ax = plt.gca()
+        ax.set_title('Model {i}'.format(i=(i+1)))
+        ax.set_xticks([])
+        ax.set_yticks([])
 
-        plt.subplot(num_images, 2, 2 + 2*j)
+        ax = plt.subplot(num_images, 2, 2 + 2*j)
         var = sig[j, :, :]**2\
                 + posterior_sample[i, indices["sigma0[{j}]".format(j=j)]]\
                 + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img
         resid = (img - data[j, :, :])/np.sqrt(var)
 
-        plt.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
-        plt.title('Standardised Residuals')
-        plt.gca().set_xticks([])
-        plt.gca().set_yticks([])
+        ax.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
+        ax.set_title('Standardised Residuals')
+        ax.set_xticks([])
+        ax.set_yticks([])
 
     plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png', bbox_inches='tight')
     print('Saved Frames/' + '%0.6d' % (i + 1) + '.png')
