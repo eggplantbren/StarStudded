@@ -63,10 +63,9 @@ for i in range(0, posterior_sample.shape[0]):
         ax.set_xticks([])
         ax.set_yticks([])
 
-    plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png', bbox_inches='tight')
+    plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png')
     print('Saved Frames/' + '%0.6d' % (i + 1) + '.png')
 plt.show()
 
-os.system('ffmpeg -r 10 -i Frames/%06d.png -c:v h264 -b:v 4192k movie.mkv')
-
+os.system('ffmpeg -r 10 -i Frames/%06d.png -c:v libvpx-vp9 -b:v 4192k movie.mkv')
 
