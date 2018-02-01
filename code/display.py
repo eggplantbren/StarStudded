@@ -22,7 +22,7 @@ metadata = np.loadtxt(a)
 num_images = int(metadata[0])
 ni = int(metadata[1])
 nj = int(metadata[2])
-max_num_stars = 200
+max_num_stars = 1500
 num_pixels = ni*nj*num_images
 
 posterior_sample = dn4.my_loadtxt('posterior_sample.txt', single_precision=True)
@@ -45,7 +45,8 @@ for i in range(0, posterior_sample.shape[0]):
         ax.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
 
         which = stars_x[i, :] != 0.0
-        ax.plot(stars_x[i, which], stars_y[i, which], 'wo', markersize=3)
+        ax.plot(stars_x[i, which], stars_y[i, which],
+                'wo', markersize=2, alpha=0.3)
         ax.axis(metadata[3:7])
 
         ax.set_title('Model {i}'.format(i=(i+1)))
