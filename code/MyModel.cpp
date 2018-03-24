@@ -115,6 +115,13 @@ double MyModel::perturb(RNG& rng)
 	if(rng.rand() <= 0.5)
 	{
 		logH += objects.perturb(rng);
+
+        // Pre-reject, incorporating prior here
+        if(rng.rand() >= exp(logH))
+            return -1E300;
+        else
+            logH = 0.0;
+
 		calculate_images(objects.get_removed().size() == 0);
 	}
 	else
@@ -124,6 +131,13 @@ double MyModel::perturb(RNG& rng)
 		{
 			int which = rng.rand_int(psfs.size());
 			logH += psfs[which].perturb(rng);
+
+            // Pre-reject, incorporating prior here
+            if(rng.rand() >= exp(logH))
+                return -1E300;
+            else
+                logH = 0.0;
+
 			calculate_image(which, false);
 		}
 		if(what == 1)

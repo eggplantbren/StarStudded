@@ -1,4 +1,4 @@
-CFLAGS = -std=c++17 -O3 -Wall -Wextra -pedantic
+CFLAGS = -std=c++17 -O3 -march=native -Wall -Wextra -pedantic
 LIBS =  -ldnest4 -lpthread
 
 default:
