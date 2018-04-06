@@ -1,9 +1,10 @@
-CFLAGS = -std=c++17 -O3 -march=native -Wall -Wextra -pedantic
+CC = g++
+CCFLAGS = -std=c++17 -O3 -march=native -DNDEBUG -Wall -Wextra -pedantic
 LIBS =  -ldnest4 -lpthread
 
 default:
 	make noexamples -C DNest4/code
-	g++ $(CFLAGS) -c *.cpp
-	g++ -L DNest4/code -o main *.o $(LIBS)
+	$(CC) $(CCFLAGS) -c *.cpp
+	$(CC) -L DNest4/code -o main *.o $(LIBS)
 	rm -f *.o
 
