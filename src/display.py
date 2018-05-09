@@ -44,7 +44,8 @@ for i in range(0, posterior_sample.shape[0]):
                 'wo', markersize=2, alpha=0.3)
         ax.axis(metadata[3:7])
 
-        ax.set_title('Catalog {i}'.format(i=(i+1)))
+        if j==0:
+            ax.set_title('Catalog {i}'.format(i=(i+1)))
         ax.set_xticks([])
         ax.set_yticks([])
 
@@ -55,7 +56,8 @@ for i in range(0, posterior_sample.shape[0]):
         resid = (img - data[j, :, :])/np.sqrt(var)
 
         ax.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
-        ax.set_title('Standardised Residuals')
+        if j==0:
+            ax.set_title('Standardised Residuals')
         ax.set_xticks([])
         ax.set_yticks([])
 
