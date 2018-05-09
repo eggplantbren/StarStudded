@@ -27,6 +27,8 @@ https://arxiv.org/pdf/1211.5805.pdf
 
 ## Dependencies
 
+So far, just [yaml-cpp](https://github.com/jbeder/yaml-cpp).
+
 You'll need git to obtain the source code, and a non-ancient version of
 g++ for it to compile properly.
 
