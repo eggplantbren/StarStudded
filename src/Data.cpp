@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include "yaml-cpp/yaml.h"
 
 using namespace std;
 
@@ -12,18 +13,46 @@ Data::Data()
 
 }
 
-void Data::load(const char* metadata_file, const char* image_file,
-			const char* sigma_file)
+void Data::load(const char* setup_file)
 {
+    // Load the run information from run.yaml
+    YAML::Node config;
+    try
+    {
+        config = YAML::LoadFile(setup_file);
+    }
+    catch(...)
+    {
+        std::cerr << "# Couldn't open or parse ";
+        std::cerr << setup_file << '.' << std::endl;
+        std::cerr << "# Aborting." << std::endl;
+        return;
+    }
+
 	/*
 	* First, read in the metadata
 	*/
-	fstream fin(metadata_file, ios::in);
-	if(!fin)
-		cerr<<"# ERROR: couldn't open file "<<metadata_file<<"."<<endl;
-	fin>>num_images>>ni>>nj;
-	fin>>x_min>>x_max>>y_min>>y_max;
-	fin.close();
+    std::string metadata_file = config["data_files"]["metadata_file"]
+                                        .as<std::string>();
+    YAML::Node metadata;
+	try
+    {
+        metadata = YAML::LoadFile(metadata_file);
+    }
+    catch(...)
+    {
+        std::cerr << "# Couldn't open or parse ";
+        std::cerr << setup_file << '.' << std::endl;
+        std::cerr << "# Aborting." << std::endl;
+        return;
+    }
+    num_images = metadata["num_images"].as<int>();
+    ni = metadata["ni"].as<int>();
+    nj = metadata["nj"].as<int>();
+    x_min = metadata["x_min"].as<double>();
+    x_max = metadata["x_max"].as<double>();
+    y_min = metadata["y_min"].as<double>();
+    y_max = metadata["y_max"].as<double>();
 
 	// Make sure maximum > minimum
 	if(x_max <= x_min || y_max <= y_min)
@@ -42,6 +71,9 @@ void Data::load(const char* metadata_file, const char* image_file,
 	/*
 	* Now, load the image
 	*/
+    std::string image_file = config["data_files"]["images_file"]
+                                        .as<std::string>();
+    std::fstream fin;
 	fin.open(image_file, ios::in);
 	if(!fin)
 		cerr<<"# ERROR: couldn't open file "<<image_file<<"."<<endl;
@@ -55,6 +87,8 @@ void Data::load(const char* metadata_file, const char* image_file,
 	/*
 	* Load the sigma map
 	*/
+    std::string sigma_file = config["data_files"]["sigmas_file"]
+                                        .as<std::string>();
 	fin.open(sigma_file, ios::in);
 	if(!fin)
 		cerr<<"# ERROR: couldn't open file "<<sigma_file<<"."<<endl;
@@ -64,13 +98,6 @@ void Data::load(const char* metadata_file, const char* image_file,
 			for(int j=0; j<nj; j++)
 				fin>>sigmas[img][i][j];
 	fin.close();
-
-    // Now save the filenames used to run_data.txt
-    fstream fout("run_data.txt", ios::out);
-    fout<<metadata_file<<endl;
-    fout<<image_file<<endl;
-    fout<<sigma_file<<endl;
-    fout.close();
 }
 
 void Data::compute_ray_grid()

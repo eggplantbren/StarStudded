@@ -6,6 +6,7 @@
 class Data
 {
 	private:
+
 		// Number of images
 		int num_images;
 
@@ -32,8 +33,7 @@ class Data
 
 	public:
 		Data();
-		void load(const char* metadata_file, const char* image_file,
-				const char* sigma_file);
+		void load(const char* setup_file);
 
 		// Getters
 		int get_num_images() const { return num_images; }
