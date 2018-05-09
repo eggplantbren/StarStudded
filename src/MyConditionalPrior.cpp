@@ -7,6 +7,9 @@
 
 using namespace DNest4;
 
+namespace StarStudded
+{
+
 // Alias
 using Normal = DNest4::Gaussian;
 
@@ -132,4 +135,6 @@ void MyConditionalPrior::print(std::ostream& out) const
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 		out << typical_fluxes[img] << ' ' << sig_log_fluxes[img] << ' ';
 }
+
+} // namespace StarStudded
 

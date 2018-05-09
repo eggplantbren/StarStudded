@@ -4,6 +4,9 @@
 #include <ostream>
 #include "DNest4/code/RNG.h"
 
+namespace StarStudded
+{
+
 // Pixel-convolved PSF
 class PSF
 {
@@ -40,6 +43,8 @@ class PSF
 		friend std::ostream& operator << (std::ostream& out,
 							const PSF& psf);
 };
+
+} // namespace StarStudded
 
 #endif
 

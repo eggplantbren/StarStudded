@@ -2,6 +2,9 @@
 #include <cmath>
 #include <cassert>
 
+namespace StarStudded
+{
+
 Lookup Lookup::instance;
 
 Lookup::Lookup()
@@ -25,4 +28,6 @@ double Lookup::evaluate(double x)
 		return 0.0;
 	return frac*instance._exp[i+1] + (1.0 - frac)*instance._exp[i];
 }
+
+} // namespace StarStudded
 

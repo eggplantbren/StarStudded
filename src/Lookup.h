@@ -3,6 +3,9 @@
 
 #include <vector>
 
+namespace StarStudded
+{
+
 /*
 * Lookup tables for speeding things up
 * Singleton pattern
@@ -24,6 +27,8 @@ class Lookup
 		static double evaluate(double x);
 
 };
+
+} // namespace StarStudded
 
 #endif
 

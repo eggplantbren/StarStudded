@@ -6,6 +6,9 @@
 #include "DNest4/code/RJObject/RJObject.h"
 #include "MyConditionalPrior.h"
 
+namespace StarStudded
+{
+
 class MyModel
 {
 	private:
@@ -57,6 +60,8 @@ class MyModel
 		// Return string with column information
 		std::string description() const;
 };
+
+} // namespace StarStudded
 
 #endif
 

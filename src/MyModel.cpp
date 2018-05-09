@@ -8,7 +8,9 @@
 
 using namespace std;
 using namespace DNest4;
-using namespace StarStudded;
+
+namespace StarStudded
+{
 
 MyModel::MyModel()
 :max_num_stars(Assumptions::get_instance().get_max_num_stars())
@@ -271,4 +273,6 @@ string MyModel::description() const
 
     return s.str();
 }
+
+} // namespace StarStudded
 

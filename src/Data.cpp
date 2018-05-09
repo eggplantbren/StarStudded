@@ -6,6 +6,9 @@
 
 using namespace std;
 
+namespace StarStudded
+{
+
 Data Data::instance;
 
 Data::Data()
@@ -118,4 +121,6 @@ void Data::compute_ray_grid()
 		}
 	}
 }
+
+} // namespace StarStudded
 

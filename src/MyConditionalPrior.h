@@ -3,6 +3,9 @@
 
 #include "DNest4/code/RJObject/ConditionalPriors/ConditionalPrior.h"
 
+namespace StarStudded
+{
+
 // Hyperparameters setting conditional prior for star properties
 class MyConditionalPrior:public DNest4::ConditionalPrior
 {
@@ -29,6 +32,8 @@ class MyConditionalPrior:public DNest4::ConditionalPrior
 
 		void print(std::ostream& out) const;
 };
+
+} // namespace StarStudded
 
 #endif
 

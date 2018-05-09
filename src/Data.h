@@ -3,6 +3,9 @@
 
 #include <vector>
 
+namespace StarStudded
+{
+
 class Data
 {
 	private:
@@ -62,6 +65,8 @@ class Data
 	public:
 		static Data& get_instance() { return instance; }
 };
+
+} // namespace StarStudded
 
 #endif
 

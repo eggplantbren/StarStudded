@@ -9,6 +9,9 @@
 using namespace std;
 using namespace DNest4;
 
+namespace StarStudded
+{
+
 const double PSF::edge = 5.0;
 
 PSF::PSF()
@@ -114,4 +117,6 @@ ostream& operator << (ostream& out, const PSF& psf)
 	out<<' '<<psf.theta<<' ';
 	return out;
 }
+
+} // namespace StarStudded
 
