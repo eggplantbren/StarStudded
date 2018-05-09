@@ -1,5 +1,5 @@
 # This YAML file is used to specify everything about a run (including where
-# to find the image data). SO FAR THIS ISN'T USED.
+# to find the image data).
 ---
 
 # Point to your data files
