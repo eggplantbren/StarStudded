@@ -1,24 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import yaml
 import dnest4.classic as dn4
 
 # Remove existing output images
 os.system("rm -rf OutputImages/*.png")
 os.system("rm -rf OutputImages/movie.mkv")
 
-# Open run_data.txt to get data filenames used for the run
-f = open("run_data.txt", "r")
-a, b, c = f.readline()[:-1], f.readline()[:-1], f.readline()[:-1]
+# Open setup file to get data filenames used for the run
+f = open("setup.yaml", "r")
+setup = yaml.load(f)
 f.close()
+a, b, c = setup["data_files"]["metadata_file"],\
+          setup["data_files"]["images_file"],\
+          setup["data_files"]["sigmas_file"]
 
 # Load files (DNest4 output and data files)
-metadata = np.loadtxt(a)
-num_images = int(metadata[0])
-ni = int(metadata[1])
-nj = int(metadata[2])
-max_num_stars = 200
+f = open(a)
+metadata = yaml.load(f)
+f.close()
+num_images = metadata["num_images"]
+ni = metadata["ni"]
+nj = metadata["nj"]
+max_num_stars = setup["assumptions"]["max_num_stars"]
 num_pixels = ni*nj*num_images
+# Convert back to list
+metadata = [num_images, ni, nj, metadata["x_min"], metadata["x_max"],\
+                metadata["y_min"], metadata["y_max"]]
 
 posterior_sample = dn4.my_loadtxt('posterior_sample.txt', single_precision=True)
 indices = dn4.load_column_names("posterior_sample.txt")["indices"]
