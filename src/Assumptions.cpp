@@ -25,7 +25,7 @@ void Assumptions::load(const char* setup_filename)
     }
 
     max_num_stars = config["assumptions"]["max_num_stars"].as<unsigned int>();
-    padding = config["assumptions"]["padding"].as<unsigned int>();
+    padding = config["assumptions"]["padding"].as<double>();
 }
 
 
