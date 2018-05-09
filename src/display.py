@@ -70,6 +70,7 @@ for i in range(0, posterior_sample.shape[0]):
         ax.set_xticks([])
         ax.set_yticks([])
 
+    plt.tight_layout()
     plt.savefig('OutputImages/' + '%0.6d' % (i + 1) + '.png')
     print('Saved OutputImages/' + '%0.6d' % (i + 1) + '.png')
 plt.show()
