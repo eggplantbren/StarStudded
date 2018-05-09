@@ -1,5 +1,5 @@
 CC = g++
-CCFLAGS = -std=c++17 -O3 -march=native -DNDEBUG -Wall -Wextra -pedantic
+CCFLAGS = -std=c++11 -O3 -march=native -DNDEBUG -Wall -Wextra -pedantic
 LIBS =  -ldnest4 -lpthread
 
 default:
