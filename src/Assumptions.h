@@ -10,7 +10,8 @@ class Assumptions
     private:
         static Assumptions instance;
     public:
-        static Assumptions& get_instance();
+        static Assumptions& get_instance()
+        { return instance; }
 
     private:
         // Member variables
@@ -20,6 +21,12 @@ class Assumptions
     public:
         // Load from a YAML file
         void load(const char* setup_filename);
+
+        // Getters
+        unsigned int get_max_num_stars() const
+        { return max_num_stars; }
+        double get_padding() const
+        { return padding; }
 };
 
 } // namespace StarStudded

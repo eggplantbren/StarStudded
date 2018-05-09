@@ -15,7 +15,7 @@ Data::Data()
 
 void Data::load(const char* setup_file)
 {
-    // Load the run information from run.yaml
+    // Load the run information from the YAML file
     YAML::Node config;
     try
     {

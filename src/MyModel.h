@@ -9,7 +9,10 @@
 class MyModel
 {
 	private:
-        static const size_t max_num_stars = 200;
+        // Max number of stars and padding, copied from global instance of
+        // Assumptions
+        unsigned int max_num_stars;
+        double padding;
 
 		// The stars
 		DNest4::RJObject<MyConditionalPrior> objects;

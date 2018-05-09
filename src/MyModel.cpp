@@ -3,14 +3,22 @@
 #include "Data.h"
 #include <cmath>
 #include <sstream>
+#include "Assumptions.h"
 #include "Lookup.h"
 
 using namespace std;
 using namespace DNest4;
+using namespace StarStudded;
 
 MyModel::MyModel()
-:objects(2 + Data::get_instance().get_num_images(), max_num_stars, false, MyConditionalPrior(Data::get_instance().get_x_min() - 0.1*Data::get_instance().get_x_range(),
-Data::get_instance().get_x_max() + 0.1*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - 0.1*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + 0.1*Data::get_instance().get_y_range()), PriorType::log_uniform)
+:max_num_stars(Assumptions::get_instance().get_max_num_stars())
+,padding(Assumptions::get_instance().get_padding())
+,objects(2 + Data::get_instance().get_num_images(),
+         max_num_stars,
+         false,
+         MyConditionalPrior(Data::get_instance().get_x_min() -
+               padding*Data::get_instance().get_x_range(),
+Data::get_instance().get_x_max() + padding*Data::get_instance().get_x_range(), Data::get_instance().get_y_min() - padding*Data::get_instance().get_y_range(), Data::get_instance().get_y_max() + padding*Data::get_instance().get_y_range()), PriorType::log_uniform)
 ,sigmas0(Data::get_instance().get_num_images())
 ,sigmas1(Data::get_instance().get_num_images())
 ,psfs(Data::get_instance().get_num_images())
