@@ -1,0 +1,18 @@
+# This YAML file is used to specify everything about a run (including where
+# to find the image data). SO FAR THIS ISN'T USED.
+---
+
+# Point to your data files
+data_files:
+    metadata_file: Data/test_metadata.yaml
+    images_file: Data/test_images.txt
+    sigmas_file: Data/test_sigma.txt
+
+# Control some of the assumptions of the inference
+assumptions:
+    # The maximum number of stars. Expect the run-time to grow as you increase
+    # this.
+    max_num_stars: 200
+
+    # How far outside the image should stars be allowed to go?
+    padding: 0.1
