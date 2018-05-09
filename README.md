@@ -77,3 +77,53 @@ aggressive DNest4 settings, you can do this instead:
 ```
 ./StarStudded -t 8 -o OPTIONS_AGGRESSIVE
 ```
+
+## Postprocessing
+
+StarStudded will run for a long time.
+The longer you run it, the more reliable the
+output will be (i.e., more posterior samples will have been generated, as
+long as everything went to plan).
+You can manually terminate it when you like, or you can
+do the postprocessing without terminating the main process.
+
+The postprocessing will require
+that you've installed the DNest4 Python package
+(see [here](https://github.com/eggplantbren/DNest4) for instructions).
+Simply invoke
+
+```
+python showresults.py
+```
+
+This will generate a bunch of output plots
+(first the three canonical DNest4 output plots, then more plots that are
+specific to StarStudded).
+As you close each plot, more will appear.
+Posterior samples will also be saved in a text file
+`posterior_sample.txt`. Later I will write a script
+to convert the posterior samples to another format for greater convenience,
+so you won't have to worry too much about what's in what column. For the
+time being, there is at least a header in `posterior_sample.txt` telling you
+what everything is.
+
+## The modelling assumptions
+
+Some of the model assumptions have changed a bit since the paper was published.
+Ask me for details. Also, some things are still hard-coded. But the maximum
+number of stars and the level of padding (how far outside the image stars can
+appear) can be controlled via `setup.yaml`.
+
+# Running other datasets
+To run other datasets, inspect `setup.yaml` to see how to set up a run.
+You need to provide a YAML file of metadata (see `Data/test_metadata.yaml` for
+an example), and plain text files with the images (row-major order, one band
+after another) and the sigma images (row major order, one band after another,
+these can also be zero).
+
+Images provided to StarStudded should be clear of any features such as
+galaxies, any non-linear background, etc. You can also use the sigma map to
+mask out any non-modellable features by settings those pixels to a very high
+standard deviation (> 1E100, and the plotting scripts will treat those pixels
+as having been totally masked).
+
