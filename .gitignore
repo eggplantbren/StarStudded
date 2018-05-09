@@ -12,4 +12,4 @@ __pycache__
 doc/ms.aux
 doc/ms.log
 doc/ms.pdf
-movie.mkv
+src/OutputImages/*

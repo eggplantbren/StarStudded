@@ -3,14 +3,9 @@ import matplotlib.pyplot as plt
 import os
 import dnest4.classic as dn4
 
-print("WARNING! This will delete\
- movie.mkv and the Frames/ directory, if these exist.")
-ch = input("Continue? y/n: ")
-if ch != "y" and ch != "Y":
-    exit()
-
-os.system("rm -rf Frames/ movie.mkv")
-os.mkdir("Frames")
+# Remove existing output images
+os.system("rm -rf OutputImages/*.png")
+os.system("rm -rf OutputImages/movie.mkv")
 
 # Open run_data.txt to get data filenames used for the run
 f = open("run_data.txt", "r")
@@ -49,7 +44,7 @@ for i in range(0, posterior_sample.shape[0]):
                 'wo', markersize=2, alpha=0.3)
         ax.axis(metadata[3:7])
 
-        ax.set_title('Model {i}'.format(i=(i+1)))
+        ax.set_title('Catalog {i}'.format(i=(i+1)))
         ax.set_xticks([])
         ax.set_yticks([])
 
@@ -64,9 +59,9 @@ for i in range(0, posterior_sample.shape[0]):
         ax.set_xticks([])
         ax.set_yticks([])
 
-    plt.savefig('Frames/' + '%0.6d' % (i + 1) + '.png')
-    print('Saved Frames/' + '%0.6d' % (i + 1) + '.png')
+    plt.savefig('OutputImages/' + '%0.6d' % (i + 1) + '.png')
+    print('Saved OutputImages/' + '%0.6d' % (i + 1) + '.png')
 plt.show()
 
-os.system('ffmpeg -r 10 -i Frames/%06d.png -c:v libvpx-vp9 -b:v 4192k movie.mkv')
+os.system('ffmpeg -r 10 -i OutputImages/%06d.png -c:v libvpx-vp9 -b:v 4192k OutputImages/movie.mkv')
 
