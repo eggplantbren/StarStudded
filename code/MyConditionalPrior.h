@@ -1,5 +1,5 @@
-#ifndef _MyConditionalPrior_
-#define _MyConditionalPrior_
+#ifndef StarField_MyConditionalPrior_h
+#define StarField_MyConditionalPrior_h
 
 #include "DNest4/code/RJObject/ConditionalPriors/ConditionalPrior.h"
 
@@ -7,12 +7,12 @@
 class MyConditionalPrior:public DNest4::ConditionalPrior
 {
 	private:
-		// Pareto prior for the fluxes
-		// One for each band
-		std::vector<double> fluxlim;
-		std::vector<double> gamma;
 
-		// Save limits
+		// Lognormal prior for stellar fluxes - one for each band
+        std::vector<double> typical_fluxes;
+        std::vector<double> sig_log_fluxes;
+
+		// Save image limits
 		double x_min, x_max, y_min, y_max;
 
 		double perturb_hyperparameters(DNest4::RNG& rng);

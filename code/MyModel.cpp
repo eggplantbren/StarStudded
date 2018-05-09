@@ -243,7 +243,7 @@ string MyModel::description() const
     s<<"num_dimensions_star, max_num_stars, ";
 
     for(int img=0; img<Data::get_instance().get_num_images(); img++)
-        s<<"fluxlim["<<img<<"], gamma["<<img<<"], ";
+        s<<"typical_fluxes["<<img<<"], sig_log_fluxes["<<img<<"], ";
 
     s<<"num_stars, ";
 
