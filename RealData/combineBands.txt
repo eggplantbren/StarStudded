@@ -1,1 +1,0 @@
-cat *.txt > rgb.txt
