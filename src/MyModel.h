@@ -1,5 +1,5 @@
-#ifndef _MyModel_
-#define _MyModel_
+#ifndef StarStudded_MyModel_h
+#define StarStudded_MyModel_h
 
 #include <vector>
 #include "PSF.h"

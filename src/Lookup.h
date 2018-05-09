@@ -1,5 +1,5 @@
-#ifndef _Lookup_
-#define _Lookup_
+#ifndef StarStudded_Lookup_h
+#define StarStudded_Lookup_h
 
 #include <vector>
 

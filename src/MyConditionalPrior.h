@@ -1,5 +1,5 @@
-#ifndef StarField_MyConditionalPrior_h
-#define StarField_MyConditionalPrior_h
+#ifndef StarStudded_MyConditionalPrior_h
+#define StarStudded_MyConditionalPrior_h
 
 #include "DNest4/code/RJObject/ConditionalPriors/ConditionalPrior.h"
 

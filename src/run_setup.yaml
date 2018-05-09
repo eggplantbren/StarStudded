@@ -10,6 +10,7 @@ data_files:
 
 # Control some of the assumptions of the inference
 assumptions:
+
     # The maximum number of stars. Expect the run-time to grow as you increase
     # this.
     max_num_stars: 200

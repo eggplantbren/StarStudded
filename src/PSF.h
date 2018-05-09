@@ -1,5 +1,5 @@
-#ifndef _PSF_
-#define _PSF_
+#ifndef StarStudded_PSF_h
+#define StarStudded_PSF_h
 
 #include <ostream>
 #include "DNest4/code/RNG.h"

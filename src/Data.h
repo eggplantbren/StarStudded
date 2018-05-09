@@ -1,5 +1,5 @@
-#ifndef _Data_
-#define _Data_
+#ifndef StarStudded_Data_h
+#define StarStudded_Data_h
 
 #include <vector>
 
