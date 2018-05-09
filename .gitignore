@@ -3,13 +3,16 @@ code/Data/harvard
 levels.txt
 sample.txt
 sample_info.txt
+sampler_state.txt
 posterior_sample.txt
 weights.txt
 run_data.txt
-main
+StarStudded
 __pycache__
 *.pyc
 doc/ms.aux
 doc/ms.log
+doc/ms.toc
+doc/texput.log
 doc/ms.pdf
 src/OutputImages/*
