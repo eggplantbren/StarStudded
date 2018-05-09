@@ -1,9 +1,11 @@
 StarStudded
 ===========
 
-StarField but based on DNest4/RJObject.
+Produce probabilistic catalogs ― that is, a posterior distribution
+for the number of stars, and their positions and fluxes,
+from noisy images of a crowded field.
 
-(c) 2015―2018 Brendon J. Brewer, Alex Malz, and Daisy Leung.
+(c) 2015–2018 Brendon J. Brewer, Alex Malz, and Daisy Leung.
 
 ## License
 
