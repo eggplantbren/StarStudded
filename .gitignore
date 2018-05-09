@@ -1,12 +1,9 @@
-code/Frames
-code/Data/harvard
 levels.txt
 sample.txt
 sample_info.txt
 sampler_state.txt
 posterior_sample.txt
 weights.txt
-run_data.txt
 StarStudded
 __pycache__
 *.pyc
@@ -15,4 +12,4 @@ doc/ms.log
 doc/ms.toc
 doc/texput.log
 doc/ms.pdf
-src/OutputImages/*
+OutputImages/*
