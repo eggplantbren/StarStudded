@@ -42,13 +42,15 @@ samples, you'll need ffmpeg.
 ## Downloading and compiling
 
 First, clone the repository recursively:
+
 ```
 git clone --recursive https://github.com/eggplantbren/StarStudded
 ```
 
 Then compile all the C++:
+
 ```
-cd StarStudded/src
+cd StarStudded
 make
 ```
 
