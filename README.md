@@ -109,11 +109,11 @@ This will generate a bunch of output plots
 specific to StarStudded).
 As you close each plot, more will appear.
 Posterior samples will also be saved in a text file
-`posterior_sample.txt`. Later I will write a script
-to convert the posterior samples to another format for greater convenience,
-so you won't have to worry too much about what's in what column. For the
-time being, there is at least a header in `posterior_sample.txt` telling you
-what everything is.
+`posterior_sample.txt`. Catalogs sampled to the posterior distribution are
+saved to a bunch of YAML files in the OutputCatalogs directory.
+These include the number of stars and the positions and fluxes of the stars.
+Other things such as hyperparameters are only in `posterior_sample.txt`;
+the excessively long header in that file labels the columns.
 
 ## The modelling assumptions
 
