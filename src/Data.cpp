@@ -62,7 +62,8 @@ void Data::load(const char* setup_file)
 
     if(log10_num_pixels > 6.0)
     {
-        std::cout << "# WARNING: Lots of pixels. Reconsider life choices.";
+        std::cout << "# WARNING: Lots of pixels. You should reconsider life ";
+        std::cout << "choices, and/or take a subset of your image.";
         std::cerr << std::endl;
     }
 
