@@ -3,6 +3,7 @@
 #include "DNest4/code/Distributions/Cauchy.h"
 #include "DNest4/code/Distributions/Gaussian.h"
 #include "DNest4/code/Utils.h"
+#include <boost/math/distributions/normal.hpp>
 #include <cmath>
 
 using namespace DNest4;
@@ -93,11 +94,9 @@ double MyConditionalPrior::log_pdf(const std::vector<double>& vec) const
 	double logp = 0.0;
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
-        // A normal distribution for log-flux
-        Normal normal(log(typical_fluxes[img]), sig_log_fluxes[img]);
-
         double log_flux = log(vec[img+2]);
-        logp += normal.log_pdf(log_flux) - log_flux;
+        logp += -0.5*log(2*M_PI) - log(sig_log_fluxes[img]) - log_flux
+                 - 0.5*pow((log_flux - log(typical_fluxes[img]))/sig_log_fluxes[img], 2);
 	}
 
 	return logp;
@@ -111,8 +110,8 @@ void MyConditionalPrior::from_uniform(std::vector<double>& vec) const
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
         // A normal distribution for log-flux
-        Normal normal(log(typical_fluxes[img]), sig_log_fluxes[img]);
-        vec[img+2] = exp(normal.cdf_inverse(vec[img+2]));
+        boost::math::normal normal(log(typical_fluxes[img]), sig_log_fluxes[img]);
+        vec[img+2] = exp(boost::math::quantile(normal, vec[img+2]));
 	}
 
 }
@@ -125,8 +124,8 @@ void MyConditionalPrior::to_uniform(std::vector<double>& vec) const
 	for(int img=0; img<Data::get_instance().get_num_images(); img++)
 	{
         // A normal distribution for log-flux
-        Normal normal(log(typical_fluxes[img]), sig_log_fluxes[img]);
-        vec[img+2] = normal.cdf(log(vec[img+2]));
+        boost::math::normal normal(log(typical_fluxes[img]), sig_log_fluxes[img]);
+        vec[img+2] = boost::math::cdf(normal, log(vec[img+2]));
 	}
 }
 

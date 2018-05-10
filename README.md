@@ -27,7 +27,15 @@ https://arxiv.org/pdf/1211.5805.pdf
 
 ## Dependencies
 
-So far, just [yaml-cpp](https://github.com/jbeder/yaml-cpp).
+So far, just the following:
+
+* [yaml-cpp](https://github.com/jbeder/yaml-cpp).
+* [boost](https://www.boost.org)
+* [DNest4](https://github.com/eggplantbren/DNest4) (but it's bundled).
+
+You can probably get the first two from your operating system's package manager.
+Don't forget the header files, which might be in a separate package
+(e.g. with a suffix -dev on Ubuntu, or -devel on Fedora).
 
 You'll need git to obtain the source code, and a non-ancient version of
 g++ for it to compile properly.
