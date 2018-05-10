@@ -12,4 +12,5 @@ doc/ms.log
 doc/ms.toc
 doc/texput.log
 doc/ms.pdf
+OutputCatalogs/*
 OutputImages/*

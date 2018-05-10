@@ -7,6 +7,7 @@ import dnest4.classic as dn4
 # Remove existing output images
 os.system("rm -rf OutputImages/*.png")
 os.system("rm -rf OutputImages/movie.mkv")
+os.system("rm -rf OutputCatalogs/*.yaml")
 
 # Open setup file to get data filenames used for the run
 f = open("setup.yaml", "r")
@@ -37,8 +38,30 @@ sig = np.reshape(np.loadtxt(c), (num_images, ni, nj))
 stars = posterior_sample[:,(num_pixels + 3 + 2*num_images):(num_pixels + 3 + 2*num_images + max_num_stars*(2 + num_images))]
 stars_x = stars[:, 0:max_num_stars]
 stars_y = stars[:, max_num_stars:2*max_num_stars]
+stars_f = stars[:, 2*max_num_stars:2*max_num_stars + num_images*max_num_stars]
 
 for i in range(0, posterior_sample.shape[0]):
+
+    # Output the catalog
+    num_stars = int(posterior_sample[i, indices["num_stars"]])
+    filename = "OutputCatalogs/catalog{k}.yaml".format(k=i+1)
+    f = open(filename, "w")
+    f.write("---\n")
+    f.write("num_stars: {n}\n".format(n=num_stars))
+    f.write("stars:\n")
+    for j in range(0, num_stars):
+        f.write("    -\n")
+        f.write("        position: ")
+        f.write(str([stars_x[i, j], stars_y[i, j]]))
+        f.write("\n")
+        f.write("        fluxes: ")
+        fluxes = []
+        for k in range(0, num_images):
+            fluxes.append(stars_f[i, j + max_num_stars*k])
+        f.write(str(fluxes))
+        f.write("\n")
+    f.close()
+    print("Saved {filename}".format(filename=filename))
 
     plt.clf()
 
@@ -70,9 +93,8 @@ for i in range(0, posterior_sample.shape[0]):
         ax.set_xticks([])
         ax.set_yticks([])
 
-    plt.tight_layout()
     plt.savefig('OutputImages/' + '%0.6d' % (i + 1) + '.png')
-    print('Saved OutputImages/' + '%0.6d' % (i + 1) + '.png')
+    print('Saved OutputImages/' + '%0.6d' % (i + 1) + '.png\n')
 plt.show()
 
 os.system('ffmpeg -r 10 -i OutputImages/%06d.png -c:v libvpx-vp9 -b:v 4192k OutputImages/movie.mkv')
