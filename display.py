@@ -103,7 +103,7 @@ for i in range(0, posterior_sample.shape[0]):
 
         ax = plt.subplot(num_images, 2, 2 + 2*j)
         var = sig[j, :, :]**2\
-                + posterior_sample[i, indices["sigma0[{j}]".format(j=j)]]\
+                + posterior_sample[i, indices["sigma0[{j}]".format(j=j)]]**2\
                 + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img
         resid = (img - data[j, :, :])/np.sqrt(var)
 
