@@ -4,9 +4,9 @@
 
 # Point to your data files
 data_files:
-    metadata_file: Data/test_metadata.yaml
-    images_file: Data/test_image.txt
-    sigmas_file: Data/test_sigma.txt
+    metadata_file: Data/100_metadata.yaml
+    images_file: Data/100_image.txt
+    sigmas_file: Data/100_sigma.txt
 
 # Control some of the assumptions of the inference
 assumptions:
