@@ -9,6 +9,11 @@ os.system("rm -rf OutputImages/*.png")
 os.system("rm -rf OutputImages/movie.mkv")
 os.system("rm -rf OutputCatalogs/*.yaml")
 
+# Set up fonts
+plt.rcParams["font.family"] = "serif"
+plt.rcParams["font.size"] = 12
+plt.rc("text", usetex=True)
+
 # Open setup file to get data filenames used for the run
 f = open("setup.yaml", "r")
 setup = yaml.load(f)
