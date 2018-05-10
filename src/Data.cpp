@@ -57,6 +57,15 @@ void Data::load(const char* setup_file)
     y_min = metadata["y_min"].as<double>();
     y_max = metadata["y_max"].as<double>();
 
+    unsigned int num_pixels = ni*nj*num_images;
+    double log10_num_pixels = log10(num_pixels);
+
+    if(log10_num_pixels > 6.0)
+    {
+        std::cout << "# WARNING: Lots of pixels. Reconsider life choices.";
+        std::cerr << std::endl;
+    }
+
 	// Make sure maximum > minimum
 	if(x_max <= x_min || y_max <= y_min)
 		cerr<<"# ERROR: strange input in "<<metadata_file<<"."<<endl;
