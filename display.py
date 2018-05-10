@@ -45,16 +45,31 @@ stars_x = stars[:, 0:max_num_stars]
 stars_y = stars[:, max_num_stars:2*max_num_stars]
 stars_f = stars[:, 2*max_num_stars:2*max_num_stars + num_images*max_num_stars]
 
+# Plot posterior for number of stars
+# Histogram-like.
+num_stars = posterior_sample[:, indices["num_stars"]].astype("int64")
+n = np.arange(0, max_num_stars+1)
+count = np.zeros(len(n))
+plt.figure()
+for i in range(len(num_stars)):
+    count[num_stars[i]] += 1
+for i in range(len(n)):
+    plt.plot([n[i], n[i]], [0, count[i]], "b-")
+plt.xlim([-0.5, max_num_stars+0.5])
+plt.ylim([0, 1.1*max(count)])
+plt.xlabel("Number of stars")
+plt.ylabel("Number of posterior samples")
+plt.show()
+
 for i in range(0, posterior_sample.shape[0]):
 
     # Output the catalog
-    num_stars = int(posterior_sample[i, indices["num_stars"]])
     filename = "OutputCatalogs/catalog{k}.yaml".format(k=i+1)
     f = open(filename, "w")
     f.write("---\n")
-    f.write("num_stars: {n}\n".format(n=num_stars))
+    f.write("num_stars: {n}\n".format(n=num_stars[i]))
     f.write("stars:\n")
-    for j in range(0, num_stars):
+    for j in range(0, num_stars[i]):
         f.write("    -\n")
         f.write("        position: ")
         f.write(str([stars_x[i, j], stars_y[i, j]]))
