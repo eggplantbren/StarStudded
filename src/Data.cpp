@@ -60,7 +60,7 @@ void Data::load(const char* setup_file)
     unsigned int num_pixels = ni*nj*num_images;
     double log10_num_pixels = log10(num_pixels);
 
-    if(log10_num_pixels > 6.0)
+    if(log10_num_pixels > 5.5)
     {
         std::cout << "# WARNING: Lots of pixels. You should reconsider life ";
         std::cout << "choices, and/or take a subset of your image.";
