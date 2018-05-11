@@ -15,7 +15,9 @@ Licence, version 3. See the LICENCE file for details.
 ## Acknowledgements
 
 This work was supported by a Marsden Fast-Start grant
-from the Royal Society of New Zealand. If you use this software, please cite
+from the Royal Society of New Zealand. It also benefited from my being invited
+to the 2015 edition of Astro Hack Week.
+If you use this software, please give the URL of this repository _and_ cite
 the following paper, which details the foundations of the methodology:
 
 Brewer, Brendon J., Daniel Foreman-Mackey, and David W. Hogg.
@@ -24,6 +26,8 @@ The Astronomical Journal 146, no. 1 (2013): 7.
 
 You can find the paper for free on the arxiv:
 https://arxiv.org/pdf/1211.5805.pdf
+
+If I write a paper about the software specifically, I'll update this advice.
 
 ## Dependencies
 
