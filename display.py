@@ -89,6 +89,10 @@ for i in range(0, posterior_sample.shape[0]):
         ax = plt.subplot(num_images, 2, 1 + 2*j)
         ax.cla()
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
+
+        # Subtract background
+        img_no_bg = img - posterior_sample[i, indices["bg[{j}]".format(j=j)]]
+
         ax.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
 
         which = stars_x[i, :] != 0.0
@@ -104,7 +108,7 @@ for i in range(0, posterior_sample.shape[0]):
         ax = plt.subplot(num_images, 2, 2 + 2*j)
         var = sig[j, :, :]**2\
                 + posterior_sample[i, indices["sigma0[{j}]".format(j=j)]]**2\
-                + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img
+                + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img_no_bg
         resid = (img - data[j, :, :])/np.sqrt(var)
 
         ax.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
