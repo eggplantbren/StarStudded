@@ -227,7 +227,7 @@ void MyModel::print(std::ostream& out) const
         bg = backgrounds[img]*signs[img];
 		for(int i=0; i<Data::get_instance().get_ni(); i++)
 			for(int j=0; j<Data::get_instance().get_nj(); j++)
-				out<<(bg + images[img][i][j])<<' ';
+				out << images[img][i][j] << ' ';
     }
 	out<<setprecision(10);
 	objects.print(out); out<<' ';

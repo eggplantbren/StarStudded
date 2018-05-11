@@ -1,3 +1,6 @@
+"""
+I know this is awful. It's also old. I might clean it up one day.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -90,10 +93,9 @@ for i in range(0, posterior_sample.shape[0]):
         ax.cla()
         img = posterior_sample[i, j * ni * nj:(j + 1) * ni * nj].reshape((ni, nj))
 
-        # Subtract background
-        img_no_bg = img - posterior_sample[i, indices["bg[{j}]".format(j=j)]]
-
-        ax.imshow(img, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
+        # Image with background added back in
+        img_bg = img + posterior_sample[i, indices["bg[{j}]".format(j=j)]]
+        ax.imshow(img_bg, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
 
         which = stars_x[i, :] != 0.0
         ax.plot(stars_x[i, which], stars_y[i, which],
@@ -108,8 +110,8 @@ for i in range(0, posterior_sample.shape[0]):
         ax = plt.subplot(num_images, 2, 2 + 2*j)
         var = sig[j, :, :]**2\
                 + posterior_sample[i, indices["sigma0[{j}]".format(j=j)]]**2\
-                + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img_no_bg
-        resid = (img - data[j, :, :])/np.sqrt(var)
+                + posterior_sample[i, indices["sigma1[{j}]".format(j=j)]]*img
+        resid = (img_bg - data[j, :, :])/np.sqrt(var)
 
         ax.imshow(resid*(sig[j, :, :] < 1E100), interpolation='nearest', cmap='coolwarm')
         if j==0:
