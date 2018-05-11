@@ -1,11 +1,13 @@
 StarStudded
 ===========
 
-Produce probabilistic catalogs ― that is, a posterior distribution
+StarStudded produces probabilistic catalogs ― that is, a posterior distribution
 for the number of stars, and their positions and fluxes,
-from noisy images of a crowded field.
+from noisy images of a crowded field of stars.
 
 (c) 2015–2018 Brendon J. Brewer, Alex Malz, and Daisy Leung.
+
+![image](image.png)
 
 ## License
 
@@ -49,7 +51,7 @@ matplotlib, yaml, and the DNest4 python package. Anaconda's distribution of
 Python 3 should work well.
 
 If you want the postprocessing scripts to be able to make a movie of posterior
-samples, you'll need ffmpeg.
+samples, you'll need [ffmpeg](http://ffmpeg.org/).
 
 ## Downloading and compiling
 
@@ -138,4 +140,9 @@ galaxies, any non-linear background, etc. You can also use the sigma map to
 mask out any non-modellable features by settings those pixels to a very high
 standard deviation (> 1E100, and the plotting scripts will treat those pixels
 as having been totally masked).
+
+Some example datasets are supplied in the Data subdirectory. The _100_ example
+has 100 stars, and is the simulated dataset from the original paper.
+The _1000_ dataset is the 1000-star data from the original paper.
+The _fink_ dataset is something Doug Finkbeiner sent me once.
 
