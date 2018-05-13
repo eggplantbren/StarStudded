@@ -17,6 +17,10 @@ plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.size"] = 12
 plt.rc("text", usetex=True)
 
+# Stretch for showing non-negative images
+def stretch(x):
+    return x**0.5
+
 # Open setup file to get data filenames used for the run
 f = open("setup.yaml", "r")
 setup = yaml.load(f)
@@ -95,7 +99,10 @@ for i in range(0, posterior_sample.shape[0]):
 
         # Image with background added back in
         img_bg = img + posterior_sample[i, indices["bg[{j}]".format(j=j)]]
-        ax.imshow(img_bg, extent=metadata[3:7], interpolation='nearest', cmap='viridis')
+        ax.imshow(stretch(img_bg),
+                  extent=metadata[3:7],
+                  interpolation='nearest',
+                  cmap='viridis')
 
         which = stars_x[i, :] != 0.0
         ax.plot(stars_x[i, which], stars_y[i, which],
