@@ -7,7 +7,7 @@ from noisy images of a crowded field of stars.
 
 (c) 2015–2018 Brendon J. Brewer, Alex Malz, and Daisy Leung.
 
-![image](image.png)
+![movie](movie.gif)
 
 ## License
 
