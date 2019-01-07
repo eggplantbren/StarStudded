@@ -12,6 +12,7 @@ int main(int argc, char** argv)
 	Data::get_instance().load("setup.yaml");
     Assumptions::get_instance().load("setup.yaml");
 
+	RNG::randh_is_randh2 = true;
 	Sampler<MyModel> sampler = setup<MyModel>(argc, argv);
 	sampler.run();
 
