@@ -1,5 +1,6 @@
 logfile
 levels.txt
+log_prior_weights.txt
 sample.txt
 sample_info.txt
 sampler_state.txt
