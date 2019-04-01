@@ -23,7 +23,7 @@ def stretch(x):
 
 # Open setup file to get data filenames used for the run
 f = open("setup.yaml", "r")
-setup = yaml.load(f)
+setup = yaml.load(f, Loader=yaml.SafeLoader)
 f.close()
 a, b, c = setup["data_files"]["metadata_file"],\
           setup["data_files"]["images_file"],\
@@ -31,7 +31,7 @@ a, b, c = setup["data_files"]["metadata_file"],\
 
 # Load files (DNest4 output and data files)
 f = open(a)
-metadata = yaml.load(f)
+metadata = yaml.load(f, Loader=yaml.SafeLoader)
 f.close()
 num_images = metadata["num_images"]
 ni = metadata["ni"]
